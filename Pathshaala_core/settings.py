@@ -28,14 +28,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
 
-TAILWIND_APP_NAME = 'theme'
 
 # Application definition
 
 INSTALLED_APPS = [
     'student',
-    'tailwind',
     'teacher',
+    'tailwind',
     'theme',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -131,6 +130,9 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+TAILWIND_APP_NAME = 'theme'

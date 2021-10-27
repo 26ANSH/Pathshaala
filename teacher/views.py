@@ -2,6 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the teacher index.")
+    return render(request, 'teacher/t.html', {'say':' Pathshaala ❤️ Teacher'})
 
 # Create your views here.
