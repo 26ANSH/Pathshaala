@@ -9,45 +9,35 @@ BODY = '''
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body{
-            padding: 4vh; 
-        }
-    </style>
-    <title>This is Pathshaala</title>
+    <title>Pathshaala - Updates</title>
 </head>
-<body>
-<h1>Welcome to Pathshaala</h1>
+<body style="padding: 4vh">
+<h1>{}</h1>
+<h4>{}</h4>
+<h5><a href="{}">{}</a></h5>
+<p>{}</p>
 </body>
 </html>
 '''
-me = "pathshalla_1234@outlook.com"
-text = "hello, maanas"
-s = smtplib.SMTP('smtp.office365.com',587)
+# me = "pathshalla_1234@outlook.com"
+me = "ansh.vidyabhanu@studentambassadors.com"
 
-s.ehlo()
-s.starttls()
-s.login(me, 'Path1234')
-
-email = '19bcs4047@cuchd.in'
-
-message = MIMEMultipart()
-
-message['From'] = me
-message['To'] = email
-message['Subject'] = 'Hello, How are you ?'
-
-part = MIMEText(BODY, 'html')
-message.attach(part)
-
-for _ in range(10):
-    s.sendmail(me, email, message.as_string())
-
-print("Mail send to >> ",email)
-
-s.quit()
+def Send_Email(to, subject, head, sub_head, link, link_text, extra=''):
+    s = smtplib.SMTP('smtp.office365.com',587)
+    s.ehlo()
+    s.starttls()
+    s.login(me, 'MayWeMeetAgain_26')
+    msg = MIMEMultipart()
+    msg['Subject'] = subject
+    msg['From'] = me
+    msg['To'] = to
+    msg.attach(MIMEText(BODY.format(head, sub_head, link, link_text, extra), 'html'))
+    s.send_message(msg)
+    del msg
+    s.quit()
 
 
-
-
-
+send = ['19bcs4074@cuchd.in','19bcs4076@cuchd.in','19bcs4085@cuchd.in','19bcs4047@cuchd.in']
+for mail in send:
+    print("sending to",mail)
+    Send_Email(mail, 'checking', 'This is Pathshaala', 'Thank you for registering with us', 'https://pathshaala.azurewebsites.net', 'Click here to login', 'Thank you for registering with us.')
