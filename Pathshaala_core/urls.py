@@ -25,5 +25,8 @@ urlpatterns = [
     path('', front.indextt, name='indextt'),
     path('student/', include('student.urls')),
     path('teacher/', include('teacher.urls')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
