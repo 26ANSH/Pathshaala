@@ -1,4 +1,4 @@
-{% load static tailwind_tags %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -6,7 +6,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		{% tailwind_css %}
+		<link rel="stylesheet" href="{% static 'style.min.css' %}"> 
 	</head>
 
 	<body class="">
@@ -20,19 +20,17 @@
   </div>
 
 
-
-    <script>
-      function darkMode() {
-        var element = document.body;
-        element.classList.toggle("dark");
-        if(element.classList.contains("dark") )
-        {
-          document.getElementById("modebtn").innerHTML = "🔆";
-        } else {
-          document.getElementById("modebtn").innerHTML = "🌙";
-        }
+  <script>
+    function darkMode() {
+      var element = document.body;
+      element.classList.toggle("dark");
+      if (element.classList.contains("dark")) {
+        document.getElementById("modebtn").innerHTML = "🔆";
+      } else {
+        document.getElementById("modebtn").innerHTML = "🌙";
       }
-    </script>
+    }
+</script>
 
 	</body>
 </html>
