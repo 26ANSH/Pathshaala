@@ -3,4 +3,4 @@ from django.shortcuts import render
 
 def indextt(request):
     context = {'say': "Welcome to Pathshaala"}
-    return render(request, 'student/index.html', context)
+    return render(request, 'landing.html')
