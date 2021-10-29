@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://pathshaala.azureedge.net/" rel="stylesheet">
+    <title>Login</title>
+</head>
+<body>
+    <h1><{{ name }} Login</h1>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        <!-- name, email, pswd -->
+        <div class="p-4 m-2 bg-purple-200 border-2 border-purple-300 rounded-md">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="p-4 border-2 border-purple-500">
+        </div>
+        <div class="p-4 m-2 bg-purple-200 border-2 border-purple-300 rounded-md">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" class="p-4 border-2 border-purple-500">
+        </div>
+        <div class="p-4 m-2 bg-purple-200 border-2 border-purple-300 rounded-md">
+            <label for="pswd">Password</label>
+            <input type="password" name="password" id="pswd" class="p-4 border-2 border-purple-500">
+        </div>
+        <div class="p-4 m-2 bg-purple-200 border-2 border-purple-300 rounded-md">
+            <button type="submit" class="bg-purple-900 text-xl p-4 text-white">Login</button>
+        </div>
+    </form>
+</body>
+</html>

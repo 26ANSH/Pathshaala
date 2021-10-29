@@ -1,8 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-def index(request):
-    return render(request, 'student/say.html', {'say':' Pathshaala ❤️ Student'})
+import random
+# login authenticate module in django.contrib
 
-def indexok(request):
-    return HttpResponse("Hello, world. You're at the Student at ok index.")
+def index(request):
+    if request.user.is_authenticated:
+        return render(request, 'student/say.html', {'say':f'{request.user.first_name} Welcome to Pathshaala'})
+    else:
+        return render(request, 'student/say.html', {'say':'GuestWelcome to Pathshaala'})
