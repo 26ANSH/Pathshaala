@@ -1,2 +1,4 @@
 django
+jwt
 pyrebase
+firebase-admin
