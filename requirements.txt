@@ -1,4 +1,5 @@
 django
-jwt
+python-jwt
 pyrebase
-firebase-admin
+google-cloud-firestore==2.3.4
+firebase-admin==5.0.3
