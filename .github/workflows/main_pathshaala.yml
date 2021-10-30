@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'pathshaala'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4C5C850D8496483DAEF74FAFEA00461B }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_303727D2367D44F1B2C6B2C8480A0CAA }}
