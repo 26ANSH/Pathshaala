@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .firebase import create_user
+from asgiref.sync import sync_to_async
+from .models import _new_user
 
 def teacher_auth(request):
     if request.user.is_authenticated and request.user.username.split('_')[0]=='teacher':
@@ -22,9 +24,12 @@ def signin(request):
         if request.method == 'POST':
             form = request.POST
             user = create_user(form['email'], form['password'])
+            print(form, user)
             if user == 400:
                 return HttpResponse('User already exists')
             else:
+                # sync_to_async(_new_user, thread_sensitive=True)
+                _new_user(user,form['name'], form['email'] )
                 User.objects.create_user(first_name = form['name'].split(' ')[0], last_name = form['name'].split(' ')[1], username='teacher_'+user, password=form['password'], email=form['email'])
                 authenticated_user = authenticate(username='teacher_'+user, password=form['password'])
                 login(request, authenticated_user)
