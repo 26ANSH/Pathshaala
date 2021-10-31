@@ -28,13 +28,14 @@ db = firestore.client()
 # print(ansh)
 
 
-def _new_user(id, name, email):
+def _new_user(id, fname, lname,email, country, gender):
     db.collection('teachers').document(id).set({
         'id':id,
-        'name':name,
-        # 'country':country,
-        # 'age':age,
-        'email':email
+        'email':email,
+        'first_name':fname,
+        'last_name':lname,
+        'country':country,
+        'gender':gender,
     })
 
 

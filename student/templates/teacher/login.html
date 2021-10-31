@@ -9,10 +9,10 @@
         <form method="post" onsubmit="return validateForm()" name="login">
             {% csrf_token %}
             <div class="py-6 px-8">
-                <label class="block font-semibold ">Email<label>
+                <label class="block font-semibold ">Email <sup class="text-xs font-bold text-red-600">*</sup><label>
                         <input type="email" placeholder="Email" name="email"
                             class="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:bg-white focus:outline-none focus:ring-2 ring-red-500 focus:ring-purple-600 dark:focus:ring-purple-400 rounded-md">
-                        <label class="block mt-3 font-semibold">Password<label>
+                        <label class="block mt-3 font-semibold">Password <sup class="text-xs font-bold text-red-600">*</sup><label>
                                 <input type="password" placeholder="Password" name="password"
                                     class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-2 ring-red-500 focus:ring-purple-600 rounded-md dark:focus:ring-purple-400">
                                 <div class="flex justify-between items-baseline">
