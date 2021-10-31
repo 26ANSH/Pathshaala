@@ -1,0 +1,49 @@
+<!-- {% load static %} -->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <title>Django Tailwind</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+	</head>
+
+	<body class="bg-purple-800 p-10">
+
+    <div class="m-5 p-5 rounded-2xl text-black text-xl font-mono bg-purple-100 leading-normal tracking-normal max-h-screen shadow-2xl">
+
+        <h1 class="text-center text-3xl font-bold">{{ header }}</h1>
+
+        <hr class="border-6 text-3xl font-bold p-2 my-4 border-purple-800">
+
+        Dear {{ name }},
+        Congratulations 🎉 on setting up your account at Pathshaala. 
+        Start your Learning Journey by visiting <a class="text-purple-900 hover:bg-purple-300 hover:underline" href="https://pathshaala.azurewebsites.net/teacher">Pathshaala</a>
+        <hr class="border-6 text-4xl font-bold p-2 my-4 border-purple-800">
+
+        Mail id - {{ email }}
+
+        <br>
+        <br>
+
+        <span class="text-xl font-serif font-bold text-purple-800 bg-purple-200 px-3 py-1">"</span>
+        <span class="text-base text-center">
+
+            There is no end to education. It is not that you read a book, pass an examination, and finish with education. The whole of life, from the moment you are born to the moment you die, is a process of learning.
+
+        </span>
+        <span class="text-xl font-bold text-purple-800 bg-purple-200 px-3 py-1 font-serif">"</span>
+        <br>
+        <br>
+        <br>
+
+        <span class="text-sm mt-5 text-center">Copyright © <a href="https://pathshaala.azurewebsites.net/" class="text-center text-purple-900 hover:bg-purple-300 hover:underline">Pathshaala</a></span>
+
+        
+
+    </div>
+
+
+	</body>
+</html>
