@@ -12,12 +12,13 @@
 
 <body class="">
  <!-- add a jinja block -->
- 
+ {% block content %} {% endblock %}
 
 <script>
     function darkMode() {
       var element = document.body;
       element.classList.toggle("dark");
+      el
       if (element.classList.contains("dark")) {
         document.getElementById("modebtn").innerHTML = "🔆";
       } else {

@@ -1,3 +1,4 @@
+from asyncio import tasks
 import firebase_admin
 from firebase_admin import credentials, firestore
 import asyncio
@@ -41,3 +42,10 @@ def _new_user(id, name, email):
 # print(new.get().exists)
 
 # _new_user('ansh_1111111111', 'ansh', 'anshemail')
+# ok = db.collection('students').document('student_1').collection('course').update("cpp")
+
+# students = db.collection('students').document('student_1')
+# print(ok.get().to_dict())
+# for i in students.stream():
+#     print(i.id)
+#     print(i.to_dict())

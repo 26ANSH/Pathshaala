@@ -20,3 +20,10 @@ def create_user(email, password):
     return user['localId']
   except:
     return 400
+
+def teacher_login(email, password):
+  try:
+    user = auth.sign_in_with_email_and_password(email, password)
+    return user['localId']
+  except:
+    return 400
