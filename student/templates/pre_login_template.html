@@ -10,9 +10,19 @@
   <link rel="stylesheet" href="{% static 'style.min.css' %}">
 </head>
 
-<body class="">
+<body class="font-mono">
  <!-- add a jinja block -->
+
+ <div class="min-h-screen bg-purple-50 text-gray-800 antialiased px-4 py-6 flex flex-col justify-center sm:py-12 dark:bg-gray-700">
+
+
+  <button id="modebtn" onclick="darkMode()"
+  class="bg-black dark:bg-white p-2 rounded-full m-4 absolute top-0 right-0">🌙</button>
+
  {% block content %} {% endblock %}
+
+ </div>
+ 
 <script>
 
   function validateForm()

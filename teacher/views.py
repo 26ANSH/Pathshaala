@@ -33,7 +33,7 @@ def signin(request):
                 login(request, authenticated_user)
                 return HttpResponse('User created and authenticated')
         else:    
-            return render(request,'teacher/signin.html')
+            return render(request,'teacher/signup.html')
     else:
         return redirect('/teacher')
 
@@ -51,9 +51,9 @@ def User_Login(request):
             else:
                 return HttpResponse('Invalid credentials, Try again')
         else:
-            return render(request,'teacher/signin.html')
+            return render(request,'teacher/login.html')
     else:
-        return redirect('/teacher')
+        return redirect('index')
         
 def my_logout(request):
     if teacher_auth(request):
