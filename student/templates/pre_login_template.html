@@ -13,12 +13,30 @@
 <body class="">
  <!-- add a jinja block -->
  {% block content %} {% endblock %}
-
 <script>
+
+  function validateForm()
+  {
+    var email = document.forms["login"]["email"];
+    var password = document.forms["login"]["password"];
+    if (email.value == "" || password.value == "") {
+        if (password.value == "")
+        {
+            password.classList.add("ring-2");
+        }
+        if (email.value == ""){
+            email.classList.add("ring-2");
+        }
+
+        return false;
+    }
+    return true;
+}
+
     function darkMode() {
       var element = document.body;
       element.classList.toggle("dark");
-      el
+  
       if (element.classList.contains("dark")) {
         document.getElementById("modebtn").innerHTML = "🔆";
       } else {

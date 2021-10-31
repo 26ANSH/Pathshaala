@@ -20,13 +20,15 @@ BODY = '''
 </html>
 '''
 # me = "pathshalla_1234@outlook.com"
-me = "ansh.vidyabhanu@studentambassadors.com"
+# me = "ansh.vidyabhanu@studentambassadors.com"
+me = "noreply.pathshaala@gmail.com"
+
 
 def Send_Email(to, subject, head, sub_head, link, link_text, extra=''):
-    s = smtplib.SMTP('smtp.office365.com',587)
+    s = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
     s.ehlo()
     s.starttls()
-    s.login(me, 'MayWeMeetAgain_26')
+    s.login(me, '19BCS4077')
     msg = MIMEMultipart()
     msg['Subject'] = subject
     msg['From'] = me
@@ -37,7 +39,7 @@ def Send_Email(to, subject, head, sub_head, link, link_text, extra=''):
     s.quit()
 
 
-send = ['19bcs4074@cuchd.in','19bcs4076@cuchd.in','19bcs4085@cuchd.in','19bcs4047@cuchd.in']
+send = ['19bcs4077@cuchd.in']
 for mail in send:
     print("sending to",mail)
-    Send_Email(mail, 'checking', 'This is Pathshaala', 'Thank you for registering with us', 'https://pathshaala.azurewebsites.net', 'Click here to login', 'Thank you for registering with us.')
+    Send_Email(mail, 'checking', 'This is Pathshaala', 'Thank you for registering with us', 'https://pathshaala.azurewebsites.net/teacher', 'Click here to login', 'Thank you for registering with us.')

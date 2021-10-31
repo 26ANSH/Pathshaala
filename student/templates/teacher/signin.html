@@ -4,26 +4,33 @@
 
 
 {% block content %}
-<div
-    class="min-h-screen bg-purple-50 text-gray-800 antialiased px-4 py-6 flex flex-col justify-center sm:py-12 dark:bg-gray-700">
-    <button id="modebtn" onclick="darkMode()" class="bg-black dark:bg-white p-2 rounded-full absolute top-0 right-0 m-4">🌙</button>
-    <div class="relative py-3 sm:max-w-xl mx-auto text-center">
+<div class="min-h-screen max-h-screen bg-purple-50 text-gray-800 antialiased px-4 py-6 flex flex-col justify-center sm:py-12 dark:bg-gray-700">
+
+
+    <button id="modebtn" onclick="darkMode()"
+    class="bg-black dark:bg-white p-2 rounded-full m-4 absolute top-0 right-0">🌙</button>
+    <div class="relative py-3 sm:max-w-xl mx-auto text-center bottom-10">
         <span class="text-2xl font-bold dark:text-white">Login to your account</span>
-        <div class="relative mt-4 bg-white shadow-lg sm:rounded-lg text-left dark:bg-gray-200">
+        <div class="relative mt-4 bg-white shadow-lg sm:rounded-lg text-left dark:bg-gray-200 rounded-t-md ">
             <div class="h-3 bg-purple-700 dark:bg-purple-400 rounded-t-md"></div>
-            <div class="py-6 px-8">
-                <label class="block font-semibold ">Email<label>
-                        <input type="text" placeholder="Email"
-                            class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:bg-white focus:outline-none focus:ring-2 focus:ring-purple-600 dark:focus:ring-purple-400 rounded-md">
-                        <label class="block mt-3 font-semibold">Password<label>
-                                <input type="password" placeholder="Password"
-                                    class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-2 focus:ring-purple-600 rounded-md dark:focus:ring-purple-400">
-                                <div class="flex justify-between items-baseline">
-                                    <button
-                                        class="mt-4 bg-purple-700 text-white py-2 px-4 font-semibold rounded-lg hover:bg-purple-800">Login</button>
-                                    <a href="#" class="text-sm hover:underline">Forgot password?</a>
-                                </div>
-            </div>
+            <form method="post" onsubmit="return validateForm()" name="login">
+                {% csrf_token %}
+                <div class="py-6 px-8">
+                    <label class="block font-semibold ">Email<label>
+                            <input type="email" placeholder="Email" name="email"
+                                class="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:bg-white focus:outline-none focus:ring-2 ring-red-500 focus:ring-purple-600 dark:focus:ring-purple-400 rounded-md">
+                            <label class="block mt-3 font-semibold">Password<label>
+                                    <input type="password" placeholder="Password" name="password"
+                                        class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-2 ring-red-500 focus:ring-purple-600 rounded-md dark:focus:ring-purple-400">
+                                    <div class="flex justify-between items-baseline">
+                                        <button type="submit"
+                                            class="mt-4 bg-purple-700 text-white py-2 px-4 font-semibold rounded-lg hover:bg-purple-900">
+                                            Login </button>
+                                        <a href="#" class="text-sm hover:underline">Forgot password?</a>
+                                    </div>
+                </div>
+                
+            </form>
         </div>
     </div>
 </div>
