@@ -2,6 +2,9 @@ from asyncio import tasks
 import firebase_admin
 from firebase_admin import credentials, firestore
 import asyncio
+import random
+from asgiref.sync import sync_to_async
+# random 6 digit number from
 
 cred = credentials.Certificate({
   "type": "service_account",
@@ -29,6 +32,7 @@ db = firestore.client()
 
 
 def _new_user(id, fname, lname,email, country, gender):
+    num = int('{:06}'.format(random.randrange(1, 10**6)))
     db.collection('teachers').document(id).set({
         'id':id,
         'email':email,
@@ -36,11 +40,15 @@ def _new_user(id, fname, lname,email, country, gender):
         'last_name':lname,
         'country':country,
         'gender':gender,
+        'token': num
     })
+    return num
 
-
-# new = db.collection('teachers').document('JqStIYsYTEEw3l2owXAT')
-# print(new.get().exists)
+# async def get_token(id):
+#   num = await int('{:06}'.format(random.randrange(1, 10**6)))
+#   task = sync_to_async(db.collection('teachers').document(id).update({'token':num}))
+#   asyncio.create_task(task())
+#   return num
 
 # _new_user('ansh_1111111111', 'ansh', 'anshemail')
 # ok = db.collection('students').document('student_1').collection('course').update("cpp")

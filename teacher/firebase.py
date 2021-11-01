@@ -27,3 +27,9 @@ def teacher_login(email, password):
     return user['localId']
   except:
     return 400
+
+
+# user = auth.sign_in_with_email_and_password('anshvidyabhanu8@gmail.com', 'password1234@')
+# print(user['localId'])
+# ok = auth.send_email_verification(user['idToken'])
+# print(ok)
