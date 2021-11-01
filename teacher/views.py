@@ -7,6 +7,9 @@ from .models import _new_user
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
+import asyncio
+from asgiref.sync import sync_to_async
+from django.contrib.auth.decorators import login_required
 
 
 def teacher_auth(request):
@@ -21,21 +24,19 @@ def index(request):
     else:
         return redirect('login')
 
-def signin(request):
-    if not teacher_auth(request):
+async def signin(request):
+    if not await sync_to_async(teacher_auth)(request):
         if request.method == 'POST':
             form = request.POST
-            user = create_user(form['email'], form['password'])
-            print(form)
+            user = await sync_to_async(create_user)(form['email'], form['password'])
             if user == 400:
                 print(user)
                 return HttpResponse('User already exists')
             else:
-                # sync_to_async(_new_user, thread_sensitive=True)
-                _new_user(user,form['fname'],form['lname'], form['email'], form['country'], form['gender'])
-                User.objects.create_user(first_name = form['fname'], last_name = form['lname'], username='teacher_'+user, password=form['password'], email=form['email'])
-                authenticated_user = authenticate(username='teacher_'+user, password=form['password'])
-                msg = render_to_string('mail.html', {'header':'Welcome to Pathshaala👨‍💻🔥', 'name': form['fname'], 'email':form['email']})
+                token = await sync_to_async(_new_user)(user,form['fname'],form['lname'], form['email'], form['country'], form['gender'])
+                await sync_to_async(User.objects.create_user)(first_name = form['fname'], last_name = form['lname'], username='teacher_'+user, password=form['password'], email=form['email'])
+                authenticated_user = await sync_to_async(authenticate)(username='teacher_'+user, password=form['password'])
+                msg = render_to_string('mail.html', {'header':'Welcome to Pathshaala👨‍💻🔥', 'name': form['fname'],'otp':token, 'email':form['email']})
                 email = EmailMessage(
                     'Welcome to Pathshaala', 
                     msg,
@@ -44,8 +45,11 @@ def signin(request):
                 )
                 email.content_subtype = 'html'
                 email.fail_silently = False
-                email.send()
-                login(request, authenticated_user)
+                mail = sync_to_async(email.send)
+                asyncio.create_task(mail())
+                # authenticated_user.is_active = False
+                # authenticated_user.save()
+                await sync_to_async(login)(request, authenticated_user)
                 return redirect('index')
         else:    
             return render(request,'teacher/signup.html')
@@ -77,3 +81,7 @@ def my_logout(request):
     return redirect('index')
 
 # def add_student(request)
+
+@login_required
+def securepage(request):
+    return HttpResponse('dashboard')
