@@ -2,43 +2,44 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-    <title>Django Tailwind</title>
+    <title>Pathshaala Mail</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 	</head>
 
-	<body class="bg-purple-800 p-10">
+	<body style="background-color: rgba(91, 33, 182, 1); padding: 1rem; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;">
 
-    <div class="m-5 p-5 rounded-2xl text-black text-xl font-mono bg-purple-100 leading-normal tracking-normal max-h-screen shadow-2xl">
+    <div style="background-color: rgba(196, 181, 253, 1); padding: 1.25rem; border-radius: 1rem; color: rgba(0, 0, 0, 1); font-size: 1.25rem; line-height: 1.75rem; line-height: 1.5; letter-spacing: 0em; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;" >
 
-        <h1 class="text-center text-3xl font-bold">{{ header }}</h1>
+        <h1 style="font-weight: 700; text-align: center; font-size: 1.875rem; line-height: 2.25rem;">{{ header }}</h1>
 
-        <hr class="border-6 text-3xl font-bold p-2 my-4 border-purple-800">
+        <hr style="border-width: 2px; border-color: rgba(91, 33, 182, 1); margin-top: 1rem; margin-bottom: 1rem;">
+
+        <br>
 
         Dear {{ name }},
         Congratulations 🎉 on setting up your account at Pathshaala. 
-        Start your Learning Journey by visiting <a class="text-purple-900 hover:bg-purple-300 hover:underline" href="https://pathshaala.azurewebsites.net/teacher">Pathshaala</a>
-        <hr class="border-6 text-4xl font-bold p-2 my-4 border-purple-800">
+        Start your Learning Journey by visiting <a style=" color: rgba(76, 29, 149, 1); " href="https://pathshaala.azurewebsites.net/teacher">Pathshaala</a>
+
+        <br>
+        <br>
+        
+        
+        <hr style="border-width: 2px; border-color: rgba(91, 33, 182, 1); margin-top: 1rem; margin-bottom: 1rem;">
+
+        <br>
 
         Mail id - {{ email }}
 
         <br>
+
+        Verify You Account OTP => <span style="color: rgba(91, 33, 182, 1); font-weight: 700;">{{ otp }}</span>
+
+        <br >
         <br>
 
-        <span class="text-xl font-serif font-bold text-purple-800 bg-purple-200 px-3 py-1">"</span>
-        <span class="text-base text-center">
-
-            There is no end to education. It is not that you read a book, pass an examination, and finish with education. The whole of life, from the moment you are born to the moment you die, is a process of learning.
-
-        </span>
-        <span class="text-xl font-bold text-purple-800 bg-purple-200 px-3 py-1 font-serif">"</span>
-        <br>
-        <br>
-        <br>
-
-        <span class="text-sm mt-5 text-center">Copyright © <a href="https://pathshaala.azurewebsites.net/" class="text-center text-purple-900 hover:bg-purple-300 hover:underline">Pathshaala</a></span>
+        <span style="text-align: center; margin-top: 1.25rem; font-size: 0.875rem; line-height: 1.25rem;">Copyright © <a href="https://pathshaala.azurewebsites.net/" class="text-center text-purple-900 hover:bg-purple-300 hover:underline">Pathshaala</a></span>
 
         
 
