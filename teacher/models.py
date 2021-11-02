@@ -44,11 +44,10 @@ def _new_user(id, fname, lname,email, country, gender):
     })
     return num
 
-# async def get_token(id):
-#   num = await int('{:06}'.format(random.randrange(1, 10**6)))
-#   task = sync_to_async(db.collection('teachers').document(id).update({'token':num}))
-#   asyncio.create_task(task())
-#   return num
+def get_token(id):
+  # num = int('{:06}'.format(random.randrange(1, 10**6)))
+  return db.collection('teachers').document(id).get().to_dict()['token']
+
 
 # _new_user('ansh_1111111111', 'ansh', 'anshemail')
 # ok = db.collection('students').document('student_1').collection('course').update("cpp")

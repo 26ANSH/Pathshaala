@@ -108,7 +108,7 @@
                                             class="mt-4 bg-purple-700 text-white py-1.5 px-3 font-semibold rounded-lg hover:bg-purple-900">Register
                                         </button>
 
-                                        <p id="form-error"class="text-red-500 text-xs italic m-1 mt-2"></p>
+                                        <p id="form-error"class="text-red-500 text-sm italic m-1 mt-2 bg-red-50 rounded-md"></p>
 
                                         <hr class="my-4 border-2 border-purple-800">
 
@@ -119,4 +119,91 @@
     </div>
 </div>
 
+<script>
+    function signupvalidateForm()
+    {
+      var email = document.forms["signup"]["email"];
+      var password = document.forms["signup"]["password"];
+      var retype_password = document.forms["signup"]["retype_password"];
+      var fname = document.forms["signup"]["fname"];
+      var lname = document.forms["signup"]["lname"];
+      var gender = document.forms["signup"]["gender"];
+      var country = document.forms["signup"]["country"];
+      var error = document.getElementById("form-error");
+      var regularExpression  = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+      console.log(email.value, password.value, country.value, fname.value, gender.value, lname.value)
+      if(lname.value == ""){
+        lname.value = " "
+      }
+
+      if (email.value == "" || password.value == "" || retype_password.value == "" || fname.value == "" || gender.value == "" || country.value == "") 
+       {
+        if (!(error.classList.contains("p-1.5"))){
+            error.classList.add("p-1.5")
+        }
+
+          if (password.value == "")
+          {
+              password.classList.add("ring-2");
+          }
+          else{
+            password.classList.remove("ring-2");
+          }
+
+          if (email.value == ""){
+              email.classList.add("ring-2");
+          }
+          else{
+            email.classList.remove("ring-2");
+          }
+
+          if (retype_password.value == ""){
+              retype_password.classList.add("ring-2");
+          }
+          else{
+            retype_password.classList.remove("ring-2");
+          }
+
+          if (fname.value == ""){
+              fname.classList.add("ring-2");
+          }
+          else{
+            fname.classList.remove("ring-2");
+          }
+
+          if (country.value == ""){
+            country.classList.add("ring-2");
+          }
+          else{
+            country.classList.remove("ring-2");
+          }
+
+          error.innerHTML = "Please Fill all * Feilds";
+          return false;
+      }
+      else if (regularExpression.test(password.value) == false || password.value.length <6 ) 
+      {
+        if (!(error.classList.contains("p-1.5"))){
+            error.classList.add("p-1.5")
+        }
+
+        password.classList.add("ring-2");
+        retype_password.classList.add("ring-2");
+        error.innerHTML = "Password not Strong <br> Guidelines = passowrd should be 6 characters long should have [lowercase alphabet, a number,  special character]"
+        return false;
+      }
+      else if (password.value != retype_password.value)
+      {
+        if (!(error.classList.contains("p-1.5"))){
+            error.classList.add("p-1.5")
+        }
+        
+        error.innerHTML = "Passwords do not match"
+        return false;
+      }
+      else{
+        return true;
+      }
+    }
+</script>
 {% endblock %}

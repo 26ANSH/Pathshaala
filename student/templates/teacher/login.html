@@ -8,7 +8,14 @@
         <div class="h-3 bg-purple-700 dark:bg-purple-400 rounded-t-md"></div>
         <form method="post" onsubmit="return validateForm()" name="login">
             {% csrf_token %}
+            
             <div class="py-6 px-8">
+                <p id="form-error"class="text-red-500 text-sm italic mb-2"> 
+                    {% if error %}
+                    {{ error }}
+                    {% endif %}
+                </p>
+
                 <label class="block font-semibold ">Email <sup class="text-xs font-bold text-red-600">*</sup><label>
                         <input type="email" placeholder="Email" name="email"
                             class="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:bg-white focus:outline-none focus:ring-2 ring-red-500 focus:ring-purple-600 dark:focus:ring-purple-400 rounded-md">
@@ -28,4 +35,27 @@
     </div>
 </div>
 
+<script>
+    function validateForm()
+    {
+      var email = document.forms["login"]["email"];
+      var password = document.forms["login"]["password"];
+      if (email.value == "" || password.value == "") 
+      {
+        document.getElementById("form-error").innerHTML = "Please Fill all * Feilds";
+
+          if (password.value == "")
+          {
+            password.classList.add("ring-2");
+          }
+          if (email.value == "")
+          {
+            email.classList.add("ring-2");
+          }
+
+          return false;
+      }
+      return true;
+  }
+</script>
 {% endblock %}

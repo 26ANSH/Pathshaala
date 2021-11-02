@@ -48,7 +48,7 @@ async def signin(request):
                 mail = sync_to_async(email.send)
                 asyncio.create_task(mail())
                 # authenticated_user.is_active = False
-                # authenticated_user.save()
+                # await sync_to_async(authenticated_user.save)()
                 await sync_to_async(login)(request, authenticated_user)
                 return redirect('index')
         else:    
@@ -68,8 +68,12 @@ def User_Login(request):
                 login(request, authenticated_user)
                 return redirect('index')
             else:
-                return HttpResponse('Invalid credentials, Try again')
+                # return HttpResponse('Invalid credentials, Try again')
+                return render(request,'teacher/login.html', {'error' : 'Wrong Email or Psssword ! Retry'})
+                # return redirect('/teacher/auth/login/?error=Wrong Email or Psssword ! Retry')
         else:
+            # if request.GET.get('error'):
+                # return render(request,'teacher/login.html', {'error':request.GET.get('error')})
             return render(request,'teacher/login.html')
     else:
         return redirect('index')
@@ -85,3 +89,12 @@ def my_logout(request):
 @login_required
 def securepage(request):
     return HttpResponse('dashboard')
+
+# def verifyemail(request):
+#     if request.method == 'POST':
+#         return HttpResponse('Post Method')
+#     else:
+#         if request.GET.get('code') and request.GET.get('email'):
+#             return HttpResponse('Code {} Email {}'.format(request.GET.get('code'), request.GET.get('email')))
+#         else:
+#             return HttpResponse('Get Method')
