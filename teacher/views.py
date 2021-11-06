@@ -38,7 +38,7 @@ async def signin(request):
                 await sync_to_async(User.objects.create_user)(first_name = form['fname'], last_name = form['lname'], username='teacher_'+user, password=form['password'], email=form['email'])
                 authenticated_user = await sync_to_async(authenticate)(username='teacher_'+user, password=form['password'])
                 print(authenticated_user)
-                msg = render_to_string('mail.html', {'header':'Welcome to Pathshaala👨‍💻🔥', 'name': form['fname'],'link':'http://localhost:8000/teacher/auth/verify/?user={}&code={}'.format(decode.sign(user), decode.sign(token)), 'email':form['email']})
+                msg = render_to_string('mail.html', {'header':'Welcome to Pathshaala👨‍💻🔥', 'name': form['fname'],'link':'https://pathshaala.azurewebsites.net/teacher/auth/verify/?user={}&code={}'.format(decode.sign(user), decode.sign(token)), 'email':form['email']})
                 email = EmailMessage(
                     'Welcome to Pathshaala', 
                     msg,
