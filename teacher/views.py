@@ -71,7 +71,8 @@ def User_Login(request):
             username = teacher_login(email, password)
             if username != 400:
                 authenticated_user = authenticate(username='teacher_'+username, password=password)
-                if authenticated_user.is_active:
+                user = User.objects.get(username=authenticated_user)
+                if user.is_active:
                     login(request, authenticated_user)
                     return redirect('index')
                 else:
