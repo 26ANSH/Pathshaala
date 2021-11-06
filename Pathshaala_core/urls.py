@@ -27,6 +27,4 @@ urlpatterns = [
     path('teacher/', include('teacher.urls')),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
+handler404 = "teacher.views.page_not_found_view"
