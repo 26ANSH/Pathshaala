@@ -6,26 +6,39 @@
     <span class="text-2xl font-bold dark:text-white">Login to your account</span>
     <div class="relative mt-4 bg-white shadow-lg sm:rounded-lg text-left dark:bg-gray-200 rounded-t-md ">
         <div class="h-3 bg-purple-700 dark:bg-purple-400 rounded-t-md"></div>
-        <form method="post" onsubmit="return validateForm()" name="login">
+        
+            {% if alert %}
+            <p id="alert" class="rounded-md font-bold text-basic italic bg-green-100 text-green-700 mt-3 mx-4 p-2">{{ alert }}<button onclick="clearalert()" class="text-white bg-gray-500 rounded-full float-right px-2 hover:bg-gray-600"> X </button></p>
+            {% endif %}
+
+            {% if error %}
+            <p id="alert" class="rounded-md font-bold text-basic italic bg-red-100 text-red-700 mt-3 mx-4 p-2">{{ error }}<button onclick="clearalert()" class="text-white bg-gray-500 rounded-full float-right px-2 hover:bg-gray-600"> X </button></p>
+            {% endif %}
+
+        <form method="post" onsubmit="return validateForm()" name="login" >
             {% csrf_token %}
-            
-            <div class="py-6 px-8">
-                <p id="form-error"class="text-red-500 text-sm italic mb-3 bg-red-50 rounded-md">{% if error %}{{ error }}{% endif %}</p>
+            <div class="py-6 px-8 pt-2">
+                <p id="form-error" class="text-red-500 text-sm italic mb-3 bg-red-50 rounded-md"></p>
 
                 <label class="block font-semibold ">Email <sup class="text-xs font-bold text-red-600">*</sup><label>
                         <input type="email" placeholder="Email" name="email"
                             class="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:bg-white focus:outline-none focus:ring-2 ring-red-500 focus:ring-purple-600 dark:focus:ring-purple-400 rounded-md">
-                        <label class="block mt-3 font-semibold">Password <sup class="text-xs font-bold text-red-600">*</sup><label>
+                        <label class="block mt-3 font-semibold">Password <sup
+                                class="text-xs font-bold text-red-600">*</sup><label>
                                 <input type="password" placeholder="Password" name="password"
                                     class=" border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-2 ring-red-500 focus:ring-purple-600 rounded-md dark:focus:ring-purple-400">
                                 <div class="flex justify-between items-baseline">
                                     <button type="submit"
                                         class="mt-4 bg-purple-700 text-white py-1.5 px-4 font-semibold rounded-lg hover:bg-purple-900">
                                         Login </button>
-                                    <a href="#" class="text-sm text-purple-700 hover:bg-purple-100 hover:underline">Forgot password?</a>
+                                    <a href="#"
+                                        class="text-sm text-purple-700 hover:bg-purple-100 hover:underline">Forgot
+                                        password?</a>
                                 </div>
                                 <hr class="my-4 border-2 border-purple-800">
-                                <span class="text-sm">Don't have an account ? <a href="/teacher/auth/signup" class="text-purple-700 hover:bg-purple-100 hover:underline">Signup Here</a></span>
+                                <span class="text-sm">Don't have an account ? <a href="/teacher/auth/signup"
+                                        class="text-purple-700 hover:bg-purple-100 hover:underline">Signup
+                                        Here</a></span>
             </div>
         </form>
     </div>
@@ -33,34 +46,23 @@
 
 <script>
 
-    function validateForm()
-    {
-      var email = document.forms["login"]["email"];
-      var password = document.forms["login"]["password"];
-      if (email.value == "" || password.value == "") 
-      {
-        document.getElementById("form-error").innerHTML = "Please Fill all * Feilds";
-        document.getElementById("form-error").classList.add("p-1.5");
+    function validateForm() {
+        var email = document.forms["login"]["email"];
+        var password = document.forms["login"]["password"];
+        if (email.value == "" || password.value == "") {
+            document.getElementById("form-error").innerHTML = "Please Fill all * Feilds";
+            document.getElementById("form-error").classList.add("p-1.5");
 
-          if (password.value == "")
-          {
-            password.classList.add("ring-2");
-          }
-          if (email.value == "")
-          {
-            email.classList.add("ring-2");
-          }
+            if (password.value == "") {
+                password.classList.add("ring-2");
+            }
+            if (email.value == "") {
+                email.classList.add("ring-2");
+            }
 
-          return false;
-      }
-      return true;
-  }
-
-
-  if (document.getElementById("form-error").innerHTML != "") 
-  {
-    document.getElementById("form-error").classList.add("p-1.5");
-}
-
+            return false;
+        }
+        return true;
+    }
 </script>
 {% endblock %}
