@@ -11,6 +11,10 @@ import asyncio
 from asgiref.sync import sync_to_async
 from django.core.signing import Signer
 
+
+def page_not_found_view(request, exception):
+    return render(request, 'error/404.html', status=404)
+
 decode = Signer()
 
 def teacher_auth(request):
@@ -52,7 +56,7 @@ async def signin(request):
                 authenticated_user.is_active = False
                 await sync_to_async(authenticated_user.save)()
                 # await sync_to_async(login)(request, authenticated_user)
-                return redirect('verify')
+                return redirect('/teacher/auth/login/?alert=Account Created! Please Verify to continue, Link sent via email')
         else:    
             return render(request,'teacher/signup.html')
     else:
@@ -71,16 +75,20 @@ def User_Login(request):
                     login(request, authenticated_user)
                     return redirect('index')
                 else:
-                    return HttpResponse('Please verify your email')
+                    return redirect('/teacher/auth/login/?error=Please Verify to continue, Link sent via email <a href='/'>link</a>')
             else:
                 # return HttpResponse('Invalid credentials, Try again')
                 return render(request,'teacher/login.html', {'error' : 'Wrong Email or Psssword ! Retry'})
                 # return redirect('/teacher/auth/login/?error=Wrong Email or Psssword ! Retry')
         else:
             if request.GET.get('error'):
-                return render(request,'teacher/login.html', {'error':request.GET.get('error')})
-            else:
-                return render(request,'teacher/login.html')
+                error = request.GET.get('error')
+                return render(request,'teacher/login.html', {'error':error})
+            elif request.GET.get('alert'):
+                alert = request.GET.get('alert')
+                return render(request,'teacher/login.html', {'alert':alert})
+            
+            return render(request,'teacher/login.html')
     else:
         return redirect('index')
 
@@ -109,19 +117,23 @@ def securepage(request):
 
 def verifyemail(request):
     if request.GET.get('code') and request.GET.get('user'):
-        id = decode.unsign(request.GET.get('user'))
-        code = decode.unsign(request.GET.get('code'))
-        username='teacher_'+id
-        user = User.objects.get(username=username)
+        try:
+            id = decode.unsign(request.GET.get('user'))
+            code = decode.unsign(request.GET.get('code'))
+            username='teacher_'+id
+            user = User.objects.get(username=username)
+        except:
+            return redirect('/teacher/auth/login/?error=INVALID LINK')
 
         if user.is_active:
-            return HttpResponse('Already Verified')
+            return redirect('/teacher/auth/login/?alert=Email Already Verified')
         else:
             if int(code) == int(get_token(id)):
                 user.is_active = True
                 user.save()
-                return HttpResponse('Now you can Login')
+                return redirect('/teacher/auth/login/?alert=Email Verified! Now you can Login to your account')
             else:
-                return HttpResponse('Invalid Code')
+                return redirect('/teacher/auth/login/?error=INVALID LINK')
     else:
-        return HttpResponse('INVALID LINK')
+        return redirect('/teacher/auth/login/?error=INVALID LINK')
+
