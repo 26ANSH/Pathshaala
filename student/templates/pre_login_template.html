@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="{% static 'style.min.css' %}">
+  <!-- <link rel="stylesheet" href="{% static 'style.min.css' %}"> -->
   <link href="https://pathshaala.azureedge.net/style.min.css" rel="stylesheet">
 </head>
 
@@ -25,6 +25,12 @@
  </div>
  
 <script>
+
+  function clearalert() 
+  {
+    document.getElementById("alert").style.display = "none";
+  }
+
     function darkMode() {
       var element = document.body;
       element.classList.toggle("dark");
