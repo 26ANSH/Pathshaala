@@ -70,17 +70,18 @@ def User_Login(request):
             password=form['password']
             username = teacher_login(email, password)
             if username != 400:
-                authenticated_user = authenticate(username='teacher_'+username, password=password)
-                user = User.objects.get(username=authenticated_user)
+                id =  'teacher_'+username
+                user = User.objects.get(username=id)
                 if user.is_active:
+                    authenticated_user = authenticate(username=id, password=password)
                     login(request, authenticated_user)
-                    return redirect('index')
+                    return redirect('dashboard')
                 else:
-                    return redirect('/teacher/auth/login/?error=Please Verify to continue, Link sent via email <a href='/'>link</a>')
+                    return redirect("/teacher/auth/login/?error=Please Verify to continue, Link sent via email at {}".format(email))
             else:
                 # return HttpResponse('Invalid credentials, Try again')
-                return render(request,'teacher/login.html', {'error' : 'Wrong Email or Psssword ! Retry'})
-                # return redirect('/teacher/auth/login/?error=Wrong Email or Psssword ! Retry')
+                # return render(request,'teacher/login.html', {'error' : 'Wrong Email or Psssword ! Retry'})
+                return redirect('/teacher/auth/login/?error=Wrong Email or Password! Please retry!')
         else:
             if request.GET.get('error'):
                 error = request.GET.get('error')
@@ -91,19 +92,19 @@ def User_Login(request):
             
             return render(request,'teacher/login.html')
     else:
-        return redirect('index')
+        return redirect('dashboard')
 
 def my_logout(request):
     if teacher_auth(request):
         logout(request)
 
-    return redirect('index')
+    return redirect('indextt')
 
 # def add_student(request)
 
 def securepage(request):
     if teacher_auth(request):
-        return HttpResponse('Secure Page')
+        return render(request, 'teacher/teacher_template.html')
     else:
         return redirect('/teacher/auth/login/?error=Login to Access')
 
@@ -137,4 +138,3 @@ def verifyemail(request):
                 return redirect('/teacher/auth/login/?error=INVALID LINK')
     else:
         return redirect('/teacher/auth/login/?error=INVALID LINK')
-
