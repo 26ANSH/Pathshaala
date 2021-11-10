@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .firebase import create_user, teacher_login
-from .models import _new_user, get_token
+from .models import _new_user, get_token, _new_course, get_courses
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -25,7 +25,7 @@ def teacher_auth(request):
 
 def index(request):
     if teacher_auth(request):
-        return render(request, 'student/say.html', {'say': f' Pathshaala ❤️ {request.user.first_name}'})
+        return render(request, 'student/say.html', {'say': f' Pathshaala ❤️ {request.user.first_name} Details = {request.user}'})
     else:
         return redirect('login')
 
@@ -102,12 +102,6 @@ def my_logout(request):
 
 # def add_student(request)
 
-def securepage(request):
-    if teacher_auth(request):
-        return render(request, 'teacher/teacher_template.html')
-    else:
-        return redirect('/teacher/auth/login/?error=Login to Access')
-
 # def verifyemail(request):
 #     if request.method == 'POST':
 #         return HttpResponse('Post Method')
@@ -138,3 +132,27 @@ def verifyemail(request):
                 return redirect('/teacher/auth/login/?error=INVALID LINK')
     else:
         return redirect('/teacher/auth/login/?error=INVALID LINK')
+
+
+def dashboard(request):
+    if teacher_auth(request):
+        return render(request, 'teacher/dashboard/main.html')
+    else:
+        return redirect('/teacher/auth/login/?error=Login to Access !!!')
+
+def students(request):
+    if teacher_auth(request):
+        return render(request, 'teacher/dashboard/users.html')
+    else:
+        return redirect('/teacher/auth/login/?error=Login to Access !!!')
+
+def courses(request):
+    if teacher_auth(request):
+        if request.method == 'POST':
+            return HttpResponse('Post Method')
+        else:
+            courses = get_courses(request.user.username.split('_')[1])
+            # print(courses)
+            return render(request, 'teacher/dashboard/course.html',{'courses': courses})
+    else:
+        return redirect('/teacher/auth/login/?error=Login to Access !!!')

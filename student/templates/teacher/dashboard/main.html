@@ -1,0 +1,21 @@
+{% extends "teacher/dashboard/teacher_template.html"%}
+
+{% block content-script %}
+<script>
+
+document.getElementById("dashboard").classList.remove("bg-purple-900")
+document.getElementById("dashboard").classList.add("bg-purple-500")
+document.getElementById("dashboard-icon").classList.remove("text-purple-600")
+
+</script>
+{% endblock %}
+
+{% block content-title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+Main Dashboard
+
+{% endblock %}

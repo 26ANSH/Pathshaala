@@ -1,10 +1,9 @@
 from asyncio import tasks
 import firebase_admin
-from firebase_admin import credentials, firestore
-import asyncio
+from firebase_admin import credentials, firestore, storage
 import random
-from asgiref.sync import sync_to_async
-# random 6 digit number from
+from google.cloud.firestore import ArrayUnion
+import datetime
 
 cred = credentials.Certificate({
   "type": "service_account",
@@ -48,6 +47,12 @@ def get_token(id):
   # num = int('{:06}'.format(random.randrange(1, 10**6)))
   return db.collection('teachers').document(id).get().to_dict()['token']
 
+def _new_course(course_id, name, teacher_id, description, tags):
+  db.collection('teachers').document(teacher_id).update({'courses':ArrayUnion([course_id])})
+  db.collection('courses').document(course_id).set({'id':course_id, 'name':name, 'description':description, 'tags':tags,'teacher_id':teacher_id, 'students':[]})
+
+def get_courses(teacher_id):
+  return db.collection('teachers').document(teacher_id).get().to_dict()['courses']
 
 # _new_user('ansh_1111111111', 'ansh', 'anshemail')
 # ok = db.collection('students').document('student_1').collection('course').update("cpp")
@@ -57,3 +62,24 @@ def get_token(id):
 # for i in students.stream():
 #     print(i.id)
 #     print(i.to_dict())
+
+
+# new_course = db.collection('courses').document('course_12345').set({'name':'C++', 'level':'Beginner'}, merge=True)
+# st = ['19bcs4077', '19bcs4074']
+# st.sort()
+# new_course = db.collection('courses').document('course_12345').update({'students':ArrayUnion(['ok1'])})
+# print(new_course)
+
+
+# course = db.collection('courses').document('course_12345').get().to_dict()
+# students = list(course['students'])
+# new_st = db.collection('courses').document('course_12345').document('students')
+# print(new_st)
+
+
+# assignments = db.collection('courses').document('course_12345').collection(u'assignments').document().set({u'name':u'assignment_1', u'marks':u'10'})
+# for doc in assignments:
+#   print(doc.id)
+#   print(doc.data)
+
+# ok = db.collection('courses').document('new_course').set({'students':[], 'name':'name', 'description':'description', 'tags':'tags','teacher_id':teacher_id})

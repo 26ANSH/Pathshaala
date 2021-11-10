@@ -13,6 +13,7 @@ CONFIG = {
 # start firebase authentication
 firebase = pyrebase.initialize_app(CONFIG)
 auth = firebase.auth()
+storage=firebase.storage()
 
 def create_user(email, password):
   try:
@@ -27,6 +28,11 @@ def teacher_login(email, password):
     return user['localId']
   except:
     return 400
+
+# def upload_dp(id):
+#     storage.child("display_images/students/"+"firebase.py").put("teacher/firebase.py")
+
+
 
 
 # user = auth.sign_in_with_email_and_password('anshvidyabhanu8@gmail.com', 'password1234@')
