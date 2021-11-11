@@ -148,11 +148,18 @@ def students(request):
 
 def courses(request):
     if teacher_auth(request):
+        courses = get_courses(request.user.username.split('_')[1])
+        # print(courses)
+        return render(request, 'teacher/dashboard/course.html',{'courses': courses})
+    else:
+        return redirect('/teacher/auth/login/?error=Login to Access !!!')
+
+
+def new_course(request):
+    if teacher_auth(request):
         if request.method == 'POST':
             return HttpResponse('Post Method')
         else:
-            courses = get_courses(request.user.username.split('_')[1])
-            # print(courses)
-            return render(request, 'teacher/dashboard/course.html',{'courses': courses})
+            return render(request, 'teacher/dashboard/add_course.html')
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')

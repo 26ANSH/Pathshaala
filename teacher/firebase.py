@@ -29,8 +29,10 @@ def teacher_login(email, password):
   except:
     return 400
 
-# def upload_dp(id):
-#     storage.child("display_images/students/"+"firebase.py").put("teacher/firebase.py")
+# # def upload_dp(id):
+# ok = storage.child("display_images/teachers/"+"default_male.png").put("student/templates/teacher/dashboard/male.png.tiff")
+# print(storage.child("display_images/teachers/"+"default_male.png").get_url())
+
 
 
 

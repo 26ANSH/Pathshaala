@@ -1,0 +1,24 @@
+{% extends "teacher/dashboard/teacher_template.html" %}
+
+
+{% block content-script %}
+<script>
+
+document.getElementById("create-courses").classList.add("bg-gray-500")
+document.getElementById("create-courses-icon").classList.remove("text-gray-600")
+</script>
+{% endblock %}
+
+
+
+{% block content-title %}
+add a new Course
+{% endblock %}
+
+
+
+{% block content %}
+
+Course Creation Form
+
+{% endblock %}

@@ -47,9 +47,13 @@ def get_token(id):
   # num = int('{:06}'.format(random.randrange(1, 10**6)))
   return db.collection('teachers').document(id).get().to_dict()['token']
 
-def _new_course(course_id, name, teacher_id, description, tags):
-  db.collection('teachers').document(teacher_id).update({'courses':ArrayUnion([course_id])})
-  db.collection('courses').document(course_id).set({'id':course_id, 'name':name, 'description':description, 'tags':tags,'teacher_id':teacher_id, 'students':[]})
+def _new_course(name, teacher_id, description, tags, img):
+  time = datetime.datetime.now()
+  course = db.collection('courses').document()
+  details = {'id':course.id, 'name':name, 'teacher_id':teacher_id, 'description':description, 'tags':tags, 'img':img, 'from':time, 'students':[]}
+  course.set(details)
+  details = {'id':course.id, 'name':name, 'description':description, 'img':img, 'from':time, 'students':0}
+  db.collection('teachers').document(teacher_id).update({'courses':ArrayUnion([details])})
 
 def get_courses(teacher_id):
   return db.collection('teachers').document(teacher_id).get().to_dict()['courses']
@@ -63,23 +67,33 @@ def get_courses(teacher_id):
 #     print(i.id)
 #     print(i.to_dict())
 
-
 # new_course = db.collection('courses').document('course_12345').set({'name':'C++', 'level':'Beginner'}, merge=True)
 # st = ['19bcs4077', '19bcs4074']
 # st.sort()
 # new_course = db.collection('courses').document('course_12345').update({'students':ArrayUnion(['ok1'])})
 # print(new_course)
 
-
 # course = db.collection('courses').document('course_12345').get().to_dict()
 # students = list(course['students'])
 # new_st = db.collection('courses').document('course_12345').document('students')
 # print(new_st)
-
 
 # assignments = db.collection('courses').document('course_12345').collection(u'assignments').document().set({u'name':u'assignment_1', u'marks':u'10'})
 # for doc in assignments:
 #   print(doc.id)
 #   print(doc.data)
 
-# ok = db.collection('courses').document('new_course').set({'students':[], 'name':'name', 'description':'description', 'tags':'tags','teacher_id':teacher_id})
+# db.collection('courses').document('jbjbjuj').set({'students':[], 'name':'name', 'description':'description', 'tags':'tags','teacher_id':1234})
+
+# courses = ['12345', '123456']
+
+# ok = db.collection('students').where(u'courses',u'array_contains_any',courses).stream()
+# print('ok =>',ok)
+# for o in ok:
+#   print(o.id)
+
+# teacher_id = "74bdcm23765i9sncu4i32o23"
+# course_id = teacher_id[:6] + random
+# print(course_id)
+
+# _new_course('Advanced Java', 'gJBGl5uxMeNRtlkWLysQl6mUqLn2', 'description', 'tags', 'https://4a7efb2d53317100f611-1d7064c4f7b6de25658a4199efb34975.ssl.cf1.rackcdn.com/patch-or-perish-java-ftc-tells-oracle-showcase_image-1-p-2014.jpg')
