@@ -27,7 +27,7 @@ def index(request):
     if teacher_auth(request):
         return render(request, 'student/say.html', {'say': f' Pathshaala ❤️ {request.user.first_name} Details = {request.user}'})
     else:
-        return redirect('login')
+        return redirect('/teacher/auth/login/?error=Login to Access !!!')
 
 async def signin(request):
     if not await sync_to_async(teacher_auth)(request):
@@ -149,8 +149,7 @@ def students(request):
 def courses(request):
     if teacher_auth(request):
         courses = get_courses(request.user.username.split('_')[1])
-        # print(courses)
-        return render(request, 'teacher/dashboard/course.html',{'courses': courses})
+        return render(request, 'teacher/dashboard/course.html',{'courses': courses, 'count':len(courses)})
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
 

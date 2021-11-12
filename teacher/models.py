@@ -96,4 +96,5 @@ def get_courses(teacher_id):
 # course_id = teacher_id[:6] + random
 # print(course_id)
 
-# _new_course('Advanced Java', 'gJBGl5uxMeNRtlkWLysQl6mUqLn2', 'description', 'tags', 'https://4a7efb2d53317100f611-1d7064c4f7b6de25658a4199efb34975.ssl.cf1.rackcdn.com/patch-or-perish-java-ftc-tells-oracle-showcase_image-1-p-2014.jpg')
+# teacher = 'gJBGl5uxMeNRtlkWLysQl6mUqLn2'
+# _new_course('C++ For Begineers', teacher, 'description', 'tags', 'https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg')
