@@ -6,6 +6,21 @@
 
 document.getElementById("create-courses").classList.add("bg-gray-500")
 document.getElementById("create-courses-icon").classList.remove("text-gray-600")
+
+function coursevalidate(){
+    courseName = document.getElementById("course-name").value;
+    courseDescription = document.getElementById("course-description").value;
+    courseTags = document.getElementById("course-tags").value;
+
+    if (courseName == "" || courseDescription == "" || courseTags == "") {
+        document.write("<div class='bg-red-50 text-red-700 text-base text-bold p-2' role='alert'>Please fill all the fields</div>");
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
 </script>
 {% endblock %}
 
@@ -19,6 +34,54 @@ add a new Course
 
 {% block content %}
 
-Course Creation Form
+{% if alert %}
+            <p id="alert" class="rounded-md font-bold text-basic italic bg-green-100 text-green-700 mt-3 mx-4 p-2">{{ alert }}<button onclick="clearalert()" class="text-white bg-gray-500 rounded-full float-right px-2 hover:bg-gray-600"> X </button></p>
+            {% endif %}
 
+            {% if error %}
+            <p id="alert" class="rounded-md font-bold text-basic italic bg-red-100 text-red-700 mt-3 mx-4 p-2">{{ error }}<button onclick="clearalert()" class="text-white bg-gray-500 rounded-full float-right px-2 hover:bg-gray-600"> X </button></p>
+            {% endif %}
+
+<div class="mx-auto my-4 py-4 px-6 text-lg w-11/12 bg-gray-900 text-white shadow-lg rounded-md items-center align-center border-2 border-black">
+    <form method="post" name="signup" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!--  Create a form with course name course description course tags  -->
+        <div class="form-group m-1 p-2">
+            <label for="course-name">Course Name <sup class="text-xs font-bold text-red-600">*</sup></label>
+            <input type="text" class="text-black form-control w-3/4 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" id="course-name" name="course-name" placeholder="Enter Course Name" required>
+        </div >
+        <div class="form-group m-1 p-2">
+            <label for="course-description">Course Description <sup class="text-xs font-bold text-red-600">*</sup></label>
+            <textarea class="text-black form-control px-4 w-3/4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" id="course-description" name="course-description" rows="1"  cols="30" placeholder="Enter Course Description" required></textarea>
+        </div>
+
+        <!-- <div class="m-1 p-2">
+            <span class="text-gray-700">Account Type</span>
+            <div class="mt-2">
+              <label class="inline-flex items-center">
+                <input type="radio" class="form-radio" name="accountType" value="personal">
+                <span class="ml-2">Link</span>
+              </label>
+              <label class="inline-flex items-center ml-6">
+                <input type="radio" class="form-radio" name="accountType" value="busines">
+                <span class="ml-2">Image</span>
+              </label>
+            </div>
+          </div> -->
+
+        <div class="form-group m-1 p-2">
+            <label for="course-pic">Course Display Image<sup class="text-xs font-bold text-red-600">*</sup></label>
+            <input type="file" accept="image/png, image/gif, image/jpeg" class="text-white form-control px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" id="course-img" name="course-image-upload" placeholder="Enter Course Name" required>
+        </div >
+
+
+
+        <div class="form-group m-1 p-2">
+            <label for="course-tags">Course Tags <sup class="text-xs font-bold text-red-600">*</sup></label>
+            <input type="text" class="form-control text-black form-control w-3/4 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" id="course-tags" name="course-tags" placeholder="Enter Course Tags" required>
+        </div>
+        <button type="submit" class="ml-4 mb-1 mt-5 p-2 bg-white text-gray-900 font-semibold rounded-md">Add Course</button>
+    
+    </form>
+</div>
 {% endblock %}
