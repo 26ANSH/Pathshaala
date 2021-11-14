@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .firebase import create_user, teacher_login
+from .firebase import create_user, teacher_login, uploadimage
 from .models import _new_user, get_token, _new_course, get_courses
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
 import asyncio
 from asgiref.sync import sync_to_async
+from django.core.files.storage import default_storage
 from django.core.signing import Signer
 
 
@@ -154,11 +155,37 @@ def courses(request):
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
 
 
-def new_course(request):
-    if teacher_auth(request):
+async def new_course(request):
+    if await sync_to_async(teacher_auth)(request):
         if request.method == 'POST':
-            return HttpResponse('Post Method')
+            # return HttpResponse('Post Method')
+            print('starting')
+            form = request.POST
+            file = request.FILES["course-image-upload"]
+            name = form['course-name']
+            print('task - 1')
+            await sync_to_async(default_storage.save)(file.name, file)
+            print('task - 2')
+            url = await sync_to_async(uploadimage)("media/" + file.name, "display_images/courses/"+file.name)
+            print('task - 3')
+            await sync_to_async(default_storage.delete)(file.name)
+            print('task - 4')
+            new_course = sync_to_async(_new_course)
+            asyncio.create_task(new_course(name, request.user.username.split('_')[1],form['course-description'], form['course-tags'].split(','), url))
+            print('all done')
+            return redirect('/teacher/dashboard/courses/create/?alert=Course Created')
         else:
+            if request.GET.get('error'):
+                error = request.GET.get('error')
+                return render(request,'teacher/dashboard/add_course.html', {'error':error})
+            elif request.GET.get('alert'):
+                alert = request.GET.get('alert')
+                return render(request,'teacher/dashboard/add_course.html', {'alert':alert})
+
             return render(request, 'teacher/dashboard/add_course.html')
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
+
+
+
+        # https://firebasestorage.googleapis.com/v0/b/pathshaala-e8244.appspot.com/o/display_images%2Fcourses%2FCheers!.png?alt=media&token=ba8852c3-ef5c-4135-98bc-743a8714ce79
