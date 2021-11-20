@@ -37,6 +37,7 @@ def _new_user(id, fname, lname,email, country, gender):
         'email':email,
         'first_name':fname,
         'last_name':lname,
+        'courses':[],
         'country':country,
         'gender':gender,
         'token': num
@@ -57,6 +58,25 @@ def _new_course(name, teacher_id, description, tags, img):
 
 def get_courses(teacher_id):
   return db.collection('teachers').document(teacher_id).get().to_dict()['courses']
+
+def add_student(email, t_id):
+  time = datetime.datetime.now()
+  checking = db.collection('students').where('email', '==', email).stream()
+
+  for check in checking:
+    id = check.id
+    students = db.collection('teachers').document(t_id).collection('students').where('id', '==' , id).stream()
+    for student in students:
+      return 400, id
+    db.collection('teachers').document(t_id).collection('students').document(id).set({'id':id, 'email':email, 'added':time})
+    return 200, id
+
+  new = db.collection('students').document()
+  id = new.id
+  new.set({'email':email, 'id':id, 'verified':False, 'created':time, 'courses':[]})
+  db.collection('teachers').document(t_id).collection('students').document(id).set({'id':id, 'email':email, 'added':time})
+  return 201, id
+
 
 # _new_user('ansh_1111111111', 'ansh', 'anshemail')
 # ok = db.collection('students').document('student_1').collection('course').update("cpp")
@@ -92,9 +112,22 @@ def get_courses(teacher_id):
 # for o in ok:
 #   print(o.id)
 
-# teacher_id = "74bdcm23765i9sncu4i32o23"
+# teacher_id = "74bdcm23765i9sncu4i32o23
 # course_id = teacher_id[:6] + random
 # print(course_id)
 
 # teacher = 'gJBGl5uxMeNRtlkWLysQl6mUqLn2'
-# _new_course('C++ For Begineers', teacher, 'description', 'tags', 'https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg')
+# _new_course('C++ For Begineers', teacher, 'description'
+
+# ok = db.collection('teachers').document('gJBGl5uxMeNRtlkWLysQl6mUqLn2').collection('students').where('id', '==', '1111123456').stream()
+# print(ok)
+# db.collection('teachers').document('gJBGl5uxMeNRtlkWLysQl6mUqLn2').document('students').set({'email':email})
+
+
+# print(add_student('okok@gmail.com', 'gJBGl5uxMeNRtlkWLysQl6mUqLn2'))
+
+
+# checking = db.collection('students').where('email', '==', 'anshv@gmail.com').stream()
+
+# for check in checking:
+#   print('ok', check.id)

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="content"></div>
+
+    <script>
+
+        fetch('https://blog.google/api/v2/latest/?paginate=7&tags=google-cloud&site_id=2&cursor=1')
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(myJson) {
+            res = myJson['results']
+            for (var i = 0; i < res.length; i++) {
+                var title = res[i]['headline']
+                var url = res[i]['url']
+                var content = res[i]['summary']
+                var date = res[i]['datetime']
+                var tags = res[i]['tags']
+                var html = `<div class="blog-post">
+                                <h2 class="blog-post-title">${title}</h2>
+                                <p class="blog-post-meta">${date}</p>
+                                <p>${content}</p>
+                                <a href="${url}">Read more</a>
+                            </div>`
+                document.getElementById('content').innerHTML += html
+            }
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+
+    </script>
+</body>
+</html>
+
+
+

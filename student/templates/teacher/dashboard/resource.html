@@ -1,0 +1,69 @@
+{% extends "teacher/dashboard/teacher_template.html"%}
+
+{% block content-script %}
+<script>
+
+document.getElementById("sr").classList.remove("bg-gray-900")
+document.getElementById("sr").classList.add("bg-gray-500")
+document.getElementById("sr-icon").classList.remove("text-gray-600")
+
+function resource()
+{
+    search = document.getElementById("search").value
+    if (search != ''){
+        document.getElementById("search").value = ''
+
+        fetch('https://www.googleapis.com/customsearch/v1?key=AIzaSyCG3GCdUeHoEobqLSQM2UxXe0hYnzSPtXI&cx=570b87cf1909441f9&q='+search)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data.items)
+            const res = data.items
+            content = document.getElementById("content")
+            content.innerHTML = ''
+            for (i = 0; i <res.length  ; i++) 
+            {
+              try 
+              {
+                img = res[i].pagemap.cse_image[0].src
+              }
+              catch(err) 
+              {
+                img = 'https://www.gstatic.com/mobilesdk/160503_mobilesdk/logo/2x/firebase_28dp.png';
+              }
+              console.log(i);
+              content.innerHTML += '<a target="_blank" href="'+res[i].link +'" class="m-2 bg-black p-2 rounded-md text-white w-2/5 md:w-2/5 lg:w-2/5 w-11/12"><div class="flex flex wrap"><div class="p-1.5"><img src="'+img+'" class="p-0.5 object-contain h-32 rounded-md bg-white" alt=""></div><div class="p-2"><h1 class="text-xl font-bold">'+res[i].title +'</h1><h3 class="text-xs">'+res[i].snippet+'</h3></div></div></a>'
+            }
+          });
+    }
+
+}
+
+</script>
+{% endblock %}
+
+{% block content-title %}
+Smart Resources
+{% endblock %}
+
+{% block content %}
+
+<div class="mx-2">
+
+    <div class="mx-auto my-4 py-4 px-6 text-lg w-full bg-gray-900 text-white shadow-lg rounded-md items-center align-center border-2 border-black">
+            <label for="email">Resources for <span class="font-bold text-red-500">??</span></label>
+            <input type="text" class="text-black form-control w-3/5 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" id="search" name="search" placeholder="Enter the Topic" required>
+        
+            <button class="p-2 bg-white text-gray-900 font-semibold rounded-md" onclick="resource()">Search</button>
+        
+        </div>
+
+        <div id="content" class="mx-auto flex flex-wrap justify-around">
+        
+        </div>
+
+</div>
+
+{% endblock %}
+
+
+<!--               document.getElementById("content").innerHTML += res[i].title + "<br>" + '<div class="m-2 bg-black p-2 rounded-md text-white w-2/5 md:w-2/5 lg:w-2/5 w-11/12"><div class="flex flex wrap"><div class="p-1.5"><img src="'+img+'" class="p-0.5 object-contain h-36 rounded-md bg-white" alt=""></div><div class="p-2"><h1 class="text-xl font-bold">'+res[i].title +'</h1><h3 class="text-base">Course description</h3></div></div></div>' -->

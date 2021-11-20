@@ -7,6 +7,26 @@
     document.getElementById("students").classList.add("bg-gray-500")
     document.getElementById("students-icon").classList.remove("text-gray-600")
 
+    function add_student()
+    {
+      email = document.getElementById("email")
+      if(email.value != ''){
+        fetch('/teacher/dashboard/students/', {
+          method: "POST",
+          body: JSON.stringify({ 'mail': email.value }),
+        }).then((_res) => {
+          _res.json().then(data => {
+            if(data.code != 'exist'){
+              table = document.getElementById("student-data")
+              table.innerHTML = table.innerHTML + '<tbody><tr><td class="p-2 border border-gray-600 text-center">'+data.email+'</td><td class="p-2 border border-gray-600 text-center">'+data.name+'</td><td class="p-2 border border-gray-600 text-center">'+data.code+'</td></tr></tbody>'
+            }
+          })
+        })
+      }
+  
+      email.value = ''
+
+    }
 </script>
 {% endblock %}
 
@@ -15,38 +35,32 @@ Student Details
 {% endblock %}
 
 {% block content %}
+<div class="mx-auto my-4 py-4 px-6 text-lg w-11/12 bg-gray-900 text-white shadow-lg rounded-md items-center align-center border-2 border-black">
+<form >
+    <label for="email">Student Email<sup class="text-xs font-bold text-red-600">*</sup></label>
+    <input type="email" class="text-black form-control w-3/5 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" id="email" name="email" placeholder="Enter Student Email Id" required>
 
-<table class="w-11/12 ml-4 border-collapse border-4 border-gray-800 m-2 text-lg">
+    <button class="p-2 bg-white text-gray-900 font-semibold rounded-md" onclick="add_student()">Add Student</button>
+
+</form>
+</div>
+<table id="student-data" class="w-11/12 my-4 mx-auto border-collapse border-4 border-gray-800 m-2 text-lg">
     <thead>
       <tr>
-        <th class="p-1 text-lg font-bold border border-gray-600 ...">Unique ID</th>
-        <th class="p-1 text-lg font-bold border border-gray-600 ...">Name</th>
-        <th class="p-1 text-lg font-bold border border-gray-600 ...">Status</th>
-        <th class="p-1 text-lg font-bold border border-gray-600 ...">Courses</th>
-        <th class="p-1 text-lg font-bold border border-gray-600 ...">Email ID</th>
+        <th class="p-1 text-lg font-bold border border-gray-600 ">Email</th>
+        <th class="p-1 text-lg font-bold border border-gray-600 ">Name</th>
+        <th class="p-1 text-lg font-bold border border-gray-600 ">Status</th>
+        <!-- <th class="p-1 text-lg font-bold border border-gray-600 lg:table-cell md:table-cell hidden">Courses</th> -->
+        <!-- <th class="p-1 text-lg font-bold border border-gray-600 lg:table-cell md:table-cell hidden">Email ID</th> -->
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td class="lg:p-0 border border-gray-600 uppercase text-center">19bcs4077</td>
-        <td class="p-2 border border-gray-600 ...">Ansh vidyabhanu</td>
+        <td class="p-2 border border-gray-600 text-center">anshvidyabhanu8@gmail</td>
+        <td class="p-2 border border-gray-600 text-center">Ansh vidyabhanu</td>
         <td class="p-2 border border-gray-600 text-center">✅</td>
-        <td class="p-2 border border-gray-600 text-center">2</td>
-        <td class="p-2 border border-gray-600 ">anshvidyabhanu8@gmail.com</td>
-      </tr>
-      <tr>
-        <td class="p-2 border border-gray-600 uppercase text-center">19bcs4074</td>
-        <td class="p-2 border border-gray-600 ...">maanas gupta</td>
-        <td class="p-2 border border-gray-600 text-center">⛔️</td>
-        <td class="p-2 border border-gray-600 text-center">3</td>
-        <td class="p-2 border border-gray-600 ">19bcs4074@cuchd.in</td>
-      </tr>
-      <tr>
-        <td class="p-2 border border-gray-600 uppercase text-center">19bcs4076</td>
-        <td class="p-2 border border-gray-600 ...">yashraj singh boparai</td>
-        <td class="p-2 border border-gray-600 text-center">✅</td>
-        <td class="p-2 border border-gray-600 text-center">4</td>
-        <td class="p-2 border border-gray-600 ">19bcs4076@cuchd.in</td>
+        <!-- <td class="p-2 border border-gray-600 text-center lg:table-cell md:table-cell hidden">2</td> -->
+        <!-- <td class="p-2 border border-gray-600 lg:table-cell md:table-cell hidden">anshvidyabhanu8@gmail.com</td> -->
       </tr>
     </tbody>
   </table>
