@@ -9,7 +9,6 @@ from django.template.loader import render_to_string
 from django.conf import settings
 import asyncio
 from asgiref.sync import sync_to_async
-from django.core.files.storage import default_storage
 from django.core.signing import Signer
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -196,20 +195,10 @@ async def new_course(request):
             form = request.POST
             file = request.FILES["course-image-upload"]
             name = form['course-name']
-            # await sync_to_async(default_storage.save)(file.name, file)
-            url = await sync_to_async(uploadimage)(file, "display_images/courses/"+name)
-            # await sync_to_async(default_storage.delete)(file.name)
-            new_course = sync_to_async(_new_course)
-            asyncio.create_task(new_course(name, request.user.username.split('_')[1],form['course-description'], form['course-tags'], url))
-            return redirect('/teacher/dashboard/courses/create/?alert=Course Created')
+            url = await sync_to_async(uploadimage)(file, "display_images/courses/"+file.name)
+            asyncio.create_task(sync_to_async(_new_course)(name, request.user.username.split('_')[1],form['course-description'], form['course-tags'], url))
+            return render(request,'teacher/dashboard/add_course.html', {'alert':f'Course "{name}" Has been Created', 'userName':request.user.first_name})
         else:
-            if request.GET.get('error'):
-                error = request.GET.get('error')
-                return render(request,'teacher/dashboard/add_course.html', {'error':error, 'userName':request.user.first_name})
-            elif request.GET.get('alert'):
-                alert = request.GET.get('alert')
-                return render(request,'teacher/dashboard/add_course.html', {'alert':alert, 'userName':request.user.first_name})
-
             return render(request, 'teacher/dashboard/add_course.html', {'userName':request.user.first_name})
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')

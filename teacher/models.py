@@ -52,11 +52,12 @@ def _new_course(name, teacher_id, description, tags, img):
   time = datetime.datetime.now()
   tags = tags.split(',')
   tags = list(map(str.strip, tags))
-  print(tags)
   course = db.collection('courses').document()
   details = {'id':course.id, 'name':name, 'teacher_id':teacher_id, 'description':description, 'tags':tags, 'img':img, 'from':time, 'students':[]}
   course.set(details)
+  # print('Detaiks 111111 >> ', details)
   details = {'id':course.id, 'name':name, 'description':description, 'img':img, 'from':time,'tags':tags, 'students':0}
+  # print('Detaiks 222222 >> ', details)
   db.collection('teachers').document(teacher_id).update({'courses':ArrayUnion([details])})
 
 def get_courses(teacher_id):
