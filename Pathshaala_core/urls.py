@@ -25,6 +25,6 @@ urlpatterns = [
     path('', front.indextt, name='indextt'),
     path('student/', include('student.urls')),
     path('teacher/', include('teacher.urls')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
 handler404 = "teacher.views.page_not_found_view"
