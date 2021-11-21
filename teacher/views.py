@@ -164,17 +164,17 @@ def students(request):
                 name = response['name']
                 return JsonResponse({'email':received_json_data['mail'], 'code':'✅','name':name })
             else:
-                msg = render_to_string('mail.html', {'header':'Welcome to Pathshaala👨‍💻', 'name': '','link':'https://pathshaala.azurewebsites.net', 'email':received_json_data['mail']})
-                email = EmailMessage(
-                    f'Invite from {request.user.first_name}', 
-                    msg,
-                    settings.EMAIL_HOST_USER,
-                    received_json_data['mail']
-                )
-                email.content_subtype = 'html'
-                email.fail_silently = False
-                mail = sync_to_async(email.send)
-                asyncio.create_task(mail()) 
+                # msg = render_to_string('mail.html', {'header':'Welcome to Pathshaala👨‍💻', 'name': '','link':'https://pathshaala.azurewebsites.net', 'email':received_json_data['mail']})
+                # email = EmailMessage(
+                #     f'Invite from {request.user.first_name}', 
+                #     msg,
+                #     settings.EMAIL_HOST_USER,
+                #     received_json_data['mail']
+                # )
+                # email.content_subtype = 'html'
+                # email.fail_silently = False
+                # mail = sync_to_async(email.send)
+                # asyncio.create_task(mail()) 
                 return JsonResponse({'email':received_json_data['mail'], 'code':'⛔️','name':'Invite Sent' })
         else:
             students_data = get_student_details(request.user.username.split('_')[1])
