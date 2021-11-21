@@ -49,16 +49,19 @@ def get_token(id):
   return db.collection('teachers').document(id).get().to_dict()['token']
 
 def _new_course(name, teacher_id, description, tags, img):
-  time = datetime.datetime.now()
-  tags = tags.split(',')
-  tags = list(map(str.strip, tags))
-  course = db.collection('courses').document()
-  details = {'id':course.id, 'name':name, 'teacher_id':teacher_id, 'description':description, 'tags':tags, 'img':img, 'from':time, 'students':[]}
-  course.set(details)
-  # print('Detaiks 111111 >> ', details)
-  details = {'id':course.id, 'name':name, 'description':description, 'img':img, 'from':time,'tags':tags, 'students':0}
-  # print('Detaiks 222222 >> ', details)
-  db.collection('teachers').document(teacher_id).update({'courses':ArrayUnion([details])})
+  try:
+    time = datetime.datetime.now()
+    tags = tags.split(',')
+    tags = list(map(str.strip, tags))
+    course = db.collection('courses').document()
+    details = {'id':course.id, 'name':name, 'teacher_id':teacher_id, 'description':description, 'tags':tags, 'img':img, 'from':time, 'students':[]}
+    course.set(details)
+    details = {'id':course.id, 'name':name, 'description':description, 'img':img, 'from':time,'tags':tags, 'students':0}
+    db.collection('teachers').document(teacher_id).update({'courses':ArrayUnion([details])})
+  except Exception as e:
+    print(e)
+
+
 
 def get_courses(teacher_id):
   return db.collection('teachers').document(teacher_id).get().to_dict()['courses']

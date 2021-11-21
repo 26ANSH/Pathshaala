@@ -197,6 +197,7 @@ async def new_course(request):
             name = form['course-name']
             url = await sync_to_async(uploadimage)(file, "display_images/courses/"+file.name)
             asyncio.create_task(sync_to_async(_new_course)(name, request.user.username.split('_')[1],form['course-description'], form['course-tags'], url))
+            
             return render(request,'teacher/dashboard/add_course.html', {'alert':f'Course "{name}" Has been Created', 'userName':request.user.first_name})
         else:
             return render(request, 'teacher/dashboard/add_course.html', {'userName':request.user.first_name})
