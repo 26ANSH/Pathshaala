@@ -17,18 +17,10 @@ cred = credentials.Certificate({
   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-8me30%40pathshaala-e8244.iam.gserviceaccount.com"
 })
+
 firebase_admin.initialize_app(cred)
 
-
 db = firestore.client()
-
-
-# # db.collection('trial').add({'name':'Ansh', 'Age':19})
-
-# # add data in collection with id = ansh_12345
-# ansh = db.collection('trial').document('ansh_1245').update({'ansh_12345':'ok'})
-# print(ansh)
-
 
 def _new_user(id, fname, lname,email, country, gender):
     num = int('{:06}'.format(random.randrange(1, 10**6)))
@@ -49,19 +41,14 @@ def get_token(id):
   return db.collection('teachers').document(id).get().to_dict()['token']
 
 def _new_course(name, teacher_id, description, tags, img):
-  try:
-    time = datetime.datetime.now()
-    tags = tags.split(',')
-    tags = list(map(str.strip, tags))
-    course = db.collection('courses').document()
-    details = {'id':course.id, 'name':name, 'teacher_id':teacher_id, 'description':description, 'tags':tags, 'img':img, 'from':time, 'students':[]}
-    course.set(details)
-    details = {'id':course.id, 'name':name, 'description':description, 'img':img, 'from':time,'tags':tags, 'students':0}
-    db.collection('teachers').document(teacher_id).update({'courses':ArrayUnion([details])})
-  except Exception as e:
-    print(e)
-
-
+  time = datetime.datetime.now()
+  tags = tags.split(',')
+  tags = list(map(str.strip, tags))
+  course = db.collection('courses').document()
+  details = {'id':course.id, 'name':name, 'teacher_id':teacher_id, 'description':description, 'tags':tags, 'img':img, 'from':time, 'students':[]}
+  course.set(details)
+  details = {'id':course.id, 'name':name, 'description':description, 'img':img, 'from':time,'tags':tags, 'students':0}
+  db.collection('teachers').document(teacher_id).update({'courses':ArrayUnion([details])})
 
 def get_courses(teacher_id):
   return db.collection('teachers').document(teacher_id).get().to_dict()['courses']
