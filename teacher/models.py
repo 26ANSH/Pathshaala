@@ -2,7 +2,7 @@ from asyncio import tasks
 import firebase_admin
 from firebase_admin import credentials, firestore, storage
 import random
-from google.cloud.firestore import ArrayUnion
+from google.cloud.firestore import ArrayUnion, Increment
 import datetime
 
 cred = credentials.Certificate({
@@ -32,7 +32,8 @@ def _new_user(id, fname, lname,email, country, gender):
         'courses':[],
         'country':country,
         'gender':gender,
-        'token': num
+        'token': num,
+        'metadata':{'total students':0,'total courses':0}
     })
     return num
 
@@ -61,16 +62,21 @@ def add_student(email, t_id):
     id = check.id
     students = db.collection('teachers').document(t_id).collection('students').where('id', '==' , id).stream()
     for student in students:
-      return 400, id
-    db.collection('teachers').document(t_id).collection('students').document(id).set({'id':id, 'email':email, 'added':time})
-    return 200, id
+      return 400, student.to_dict()
+    db.collection('teachers').document(t_id).collection('students').document(id).set({'id':id, 'email':email, 'added':time, 'verified':True})
+    return 200, check.to_dict()
 
   new = db.collection('students').document()
   id = new.id
   new.set({'email':email, 'id':id, 'verified':False, 'created':time, 'courses':[]})
-  db.collection('teachers').document(t_id).collection('students').document(id).set({'id':id, 'email':email, 'added':time})
-  return 201, id
+  db.collection('teachers').document(t_id).collection('students').document(id).set({'id':id, 'email':email, 'added':time, 'verified':False, 'name':'Invite Sent'})
+  return 100, id
 
+def get_student_details(t_id):
+  students = db.collection('teachers').document(t_id).collection('students').get()
+  students = [st.to_dict() for st in students]
+  return students
+  
 
 # _new_user('ansh_1111111111', 'ansh', 'anshemail')
 # ok = db.collection('students').document('student_1').collection('course').update("cpp")
@@ -125,3 +131,6 @@ def add_student(email, t_id):
 
 # for check in checking:
 #   print('ok', check.id)
+
+
+# print(get_student_details('gJBGl5uxMeNRtlkWLysQl6mUqLn2'))

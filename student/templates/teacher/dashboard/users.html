@@ -18,7 +18,7 @@
           _res.json().then(data => {
             if(data.code != 'exist'){
               table = document.getElementById("student-data")
-              table.innerHTML = table.innerHTML + '<tbody><tr><td class="p-2 border border-gray-600 text-center">'+data.email+'</td><td class="p-2 border border-gray-600 text-center">'+data.name+'</td><td class="p-2 border border-gray-600 text-center">'+data.code+'</td></tr></tbody>'
+              table.innerHTML = table.innerHTML + '<tr><td class="p-2 border border-gray-600 text-center">'+data.email+'</td><td class="p-2 border border-gray-600 text-center">'+data.name+'</td><td class="p-2 border border-gray-600 text-center">'+data.code+'</td></tr>'
             }
           })
         })
@@ -55,13 +55,28 @@ Student Details
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <!-- <tr>
         <td class="p-2 border border-gray-600 text-center">anshvidyabhanu8@gmail</td>
         <td class="p-2 border border-gray-600 text-center">Ansh vidyabhanu</td>
         <td class="p-2 border border-gray-600 text-center">✅</td>
-        <!-- <td class="p-2 border border-gray-600 text-center lg:table-cell md:table-cell hidden">2</td> -->
-        <!-- <td class="p-2 border border-gray-600 lg:table-cell md:table-cell hidden">anshvidyabhanu8@gmail.com</td> -->
+         <td class="p-2 border border-gray-600 text-center lg:table-cell md:table-cell hidden">2</td>
+       <td class="p-2 border border-gray-600 lg:table-cell md:table-cell hidden">anshvidyabhanu8@gmail.com</td>
+      </tr> -->
+
+      {% for student in students %}
+
+      <tr>
+        <td class="p-2 border border-gray-600 text-center">{{ student.email }}</td>
+        <td class="p-2 border border-gray-600 text-center">{{ student.name }}</td>
+        {% if student.verified %}
+        <td class="p-2 border border-gray-600 text-center">✅</td>
+        {% else %}
+        <td class="p-2 border border-gray-600 text-center">⛔️</td>
+        {% endif %}
       </tr>
+
+
+      {% endfor %}
     </tbody>
   </table>
 

@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .firebase import create_user, teacher_login, uploadimage
-from .models import _new_user, get_token, _new_course, get_courses, add_student
+from .models import _new_user, get_token, _new_course, get_courses, add_student, get_student_details
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -157,26 +157,28 @@ def students(request):
     if teacher_auth(request):
         if request.method == 'POST':
             received_json_data = json.loads(request.body)
-            code, msg = add_student(received_json_data['mail'], request.user.username.split('_')[1])
+            code, response = add_student(received_json_data['mail'], request.user.username.split('_')[1])
             if code == 400:
-                return JsonResponse({'email':received_json_data['mail'], 'code':'exist','name':'xyz xyz' })
+                return JsonResponse({'code':'exist'})
             elif code == 200:
-                # msg = render_to_string('mail.html', {'header':'Welcome to Pathshaala👨‍💻🔥', 'name': '','link':'https://pathshaala.azurewebsites.net/teacher/auth/verify/?user={}&code={}'.format(decode.sign(user), decode.sign(token)), 'email':form['email']})
-                # email = EmailMessage(
-                #     'Welcome to Pathshaala', 
-                #     msg,
-                #     settings.EMAIL_HOST_USER,
-                #     received_json_data['mail']
-                # )
-                # email.content_subtype = 'html'
-                # email.fail_silently = False
-                # mail = sync_to_async(email.send)
-                # asyncio.create_task(mail()) 
-                return JsonResponse({'email':received_json_data['mail'], 'code':'✅','name':msg })
+                name = response['name']
+                return JsonResponse({'email':received_json_data['mail'], 'code':'✅','name':name })
             else:
+                msg = render_to_string('mail.html', {'header':'Welcome to Pathshaala👨‍💻', 'name': '','link':'https://pathshaala.azurewebsites.net', 'email':received_json_data['mail']})
+                email = EmailMessage(
+                    f'Invite from {request.user.first_name}', 
+                    msg,
+                    settings.EMAIL_HOST_USER,
+                    received_json_data['mail']
+                )
+                email.content_subtype = 'html'
+                email.fail_silently = False
+                mail = sync_to_async(email.send)
+                asyncio.create_task(mail()) 
                 return JsonResponse({'email':received_json_data['mail'], 'code':'⛔️','name':'Invite Sent' })
         else:
-            return render(request, 'teacher/dashboard/users.html', {'userName':request.user.first_name})
+            students_data = get_student_details(request.user.username.split('_')[1])
+            return render(request, 'teacher/dashboard/users.html', {'userName':request.user.first_name, 'students':students_data})
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
 
@@ -198,7 +200,7 @@ async def new_course(request):
             url = await sync_to_async(uploadimage)(file, "display_images/courses/"+file.name)
             # asyncio.create_task(sync_to_async(_new_course)(name, request.user.username.split('_')[1],form['course-description'], form['course-tags'], url))
             await sync_to_async(_new_course)(name, request.user.username.split('_')[1],form['course-description'], form['course-tags'], url)
-            
+
             return render(request,'teacher/dashboard/add_course.html', {'alert':f'Course "{name}" Has been Created', 'userName':request.user.first_name})
         else:
             return render(request, 'teacher/dashboard/add_course.html', {'userName':request.user.first_name})
