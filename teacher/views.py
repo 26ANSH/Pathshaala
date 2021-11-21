@@ -196,11 +196,11 @@ async def new_course(request):
             form = request.POST
             file = request.FILES["course-image-upload"]
             name = form['course-name']
-            await sync_to_async(default_storage.save)(file.name, file)
-            url = await sync_to_async(uploadimage)("media/" + file.name, "display_images/courses/"+file.name)
-            await sync_to_async(default_storage.delete)(file.name)
+            # await sync_to_async(default_storage.save)(file.name, file)
+            url = await sync_to_async(uploadimage)(file, "display_images/courses/"+name)
+            # await sync_to_async(default_storage.delete)(file.name)
             new_course = sync_to_async(_new_course)
-            asyncio.create_task(new_course(name, request.user.username.split('_')[1],form['course-description'], form['course-tags'].split(','), url))
+            asyncio.create_task(new_course(name, request.user.username.split('_')[1],form['course-description'], form['course-tags'], url))
             return redirect('/teacher/dashboard/courses/create/?alert=Course Created')
         else:
             if request.GET.get('error'):
