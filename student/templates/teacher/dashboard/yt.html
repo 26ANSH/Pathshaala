@@ -1,0 +1,75 @@
+{% extends "teacher/dashboard/teacher_template.html"%}
+
+{% block content-script %}
+<script>
+
+document.getElementById("sv").classList.remove("bg-gray-900")
+document.getElementById("sv").classList.add("bg-gray-500")
+document.getElementById("sv-icon").classList.remove("text-gray-600")
+
+function resource()
+{
+    search = document.getElementById("search").value
+    if (search != ''){
+        document.getElementById("search").value = ''
+
+        fetch("https://youtube-search-results.p.rapidapi.com/youtube-search/?q="+search, {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "youtube-search-results.p.rapidapi.com",
+                "x-rapidapi-key": "452d4108abmsh1bd4c970b9699f9p1853dajsnf11960f49962"
+            }
+        })
+          .then(response => response.json())
+          .then(data => {
+            const res = data.items
+            content = document.getElementById("content")
+            content.innerHTML = ''
+            for (i = 0; i <res.length  ; i++) 
+            {
+              if(res[i].type != "playlist")
+              {
+              try 
+              {
+                img = res[i].thumbnails[0].url
+                img = img.split("?")[0]
+              }
+              catch(err) 
+              {
+                img = 'https://www.gstatic.com/mobilesdk/160503_mobilesdk/logo/2x/firebase_28dp.png';
+              }
+              console.log(img)
+              content.innerHTML += '<a href="'+res[i].url +'" target="_blank" class="w-full card-responsive m-2 bg-gray-900 p-2 rounded-md transition-linear duration-300"><h1 class="text-2xl text-white font-bold mx-1">'+res[i].title +'</h1><hr class="text-white bg-white my-1 mb-2"><img src="'+ img +'" class="object-contain h-52 rounded-md bg-white w-full" alt=""><h3 class="text-white text-sm bg-gray-500 m-1 p-1">Duration:'+res[i].duration+'<span class="float-right">'+res[i].uploadedAt+'</span></h3></a>'
+            }
+            }
+          });
+    }
+
+}
+
+</script>
+{% endblock %}
+
+{% block content-title %}
+Watch and Learn
+{% endblock %}
+
+{% block content %}
+
+<div class="mx-2">
+
+    <div class="mx-auto my-4 py-4 px-6 text-lg w-full bg-gray-900 text-white shadow-lg rounded-md items-center align-center border-2 border-black">
+            <label for="email">Video for <span class="font-bold text-red-500">??</span></label>
+            <input type="text" class="text-black form-control w-3/5 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" id="search" name="search" placeholder="Enter the Topic" required>
+        
+            <button class="p-2 bg-white text-gray-900 font-semibold rounded-md" onclick="resource()">Search</button>
+        
+        </div>
+
+        <div id="content" class="mx-auto flex flex-wrap justify-around">
+        
+        </div>
+
+</div>
+
+{% endblock %}

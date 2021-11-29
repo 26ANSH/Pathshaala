@@ -18,6 +18,7 @@ cred = credentials.Certificate({
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-8me30%40pathshaala-e8244.iam.gserviceaccount.com"
 })
 
+
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -29,32 +30,39 @@ def _new_user(id, fname, lname,email, country, gender):
         'email':email,
         'first_name':fname,
         'last_name':lname,
-        'courses':[],
         'country':country,
         'gender':gender,
         'token': num,
-        'metadata':{'total students':0,'total courses':0}
+        'metadata':{'students':0,'studentLimit':500,'courses':0,'courseLimit':10}
     })
     return num
 
 def get_token(id):
-  # num = int('{:06}'.format(random.randrange(1, 10**6)))
   return db.collection('teachers').document(id).get().to_dict()['token']
 
 def _new_course(name, teacher_id, description, tags, img):
+  # random_number = str(random.randint((10**(3)), (10**(3))))
   time = datetime.datetime.now()
   tags = tags.split(',')
   tags = list(map(str.strip, tags))
   course = db.collection('courses').document()
-  details = {'id':course.id, 'name':name, 'teacher_id':teacher_id, 'description':description, 'tags':tags, 'img':img, 'from':time, 'students':[]}
+  code = video_code()
+  details = {'id':course.id, 'code':name.replace(' ', '-'), 'live': code ,'name':name.title(), 'teacher_id':teacher_id, 'description':description, 'tags':tags, 'img':img, 'from':time, 'students':[], 'students':0}
   course.set(details)
-  details = {'id':course.id, 'name':name, 'description':description, 'img':img, 'from':time,'tags':tags, 'students':0}
-  db.collection('teachers').document(teacher_id).update({'courses':ArrayUnion([details])})
+  db.collection('teachers').document(teacher_id).update({'metadata.courses': Increment(1)})
+
+def get_meta(id):
+  meta = db.collection('teachers').document(id).get().to_dict()['metadata']
+  meta['total_course_percent'] = (meta['courses']/meta['courseLimit']) * 100
+  meta['total_students_percent'] = (meta['students']/meta['studentLimit']) * 100
+  return meta
 
 def get_courses(teacher_id):
-  return db.collection('teachers').document(teacher_id).get().to_dict()['courses']
+  courses = db.collection('courses').where('teacher_id', '==', teacher_id).get()
+  courses = [i.to_dict() for i in courses]
+  return courses
 
-def add_student(email, t_id):
+def add_student(email, t_id, c_id):
   time = datetime.datetime.now()
   checking = db.collection('students').where('email', '==', email).stream()
 
@@ -72,11 +80,19 @@ def add_student(email, t_id):
   db.collection('teachers').document(t_id).collection('students').document(id).set({'id':id, 'email':email, 'added':time, 'verified':False, 'name':'Invite Sent'})
   return 100, id
 
-def get_student_details(t_id):
-  students = db.collection('teachers').document(t_id).collection('students').get()
-  students = [st.to_dict() for st in students]
-  return students
+def get_student_details(code, t_id):
+  return [student.to_dict() for student in db.collection('courses').where('code', '==', code).where('teacher_id', '==', t_id).get()[0].reference.collection('students').get()]
   
+def video_code():
+  nums=[8,4,4,4,12]
+  code = ''
+  for num in nums:
+    random_number = str(random.randint((10**(num-1)), (10**(num))))
+    code += random_number + '-'
+  return code[:-1]
+
+def get_course(code, t_id):
+  return list(db.collection('courses').where('code', '==', code).where('teacher_id', '==', t_id).stream())[0].to_dict()
 
 # _new_user('ansh_1111111111', 'ansh', 'anshemail')
 # ok = db.collection('students').document('student_1').collection('course').update("cpp")
@@ -134,3 +150,18 @@ def get_student_details(t_id):
 
 
 # print(get_student_details('gJBGl5uxMeNRtlkWLysQl6mUqLn2'))
+
+
+
+# checking = db.collection('courses').where('teacher_id', '==', 'EVNQ01lswdeXch30vmaBJjLoTn83').get()
+# # tags = list(map(str.strip, tags))
+# checking = [i.to_dict() for i in checking]
+# for check in checking:
+#   print(check['name'])
+
+
+# course = list(db.collection('courses').where('code', '==', 'acha-acha').where('teacher_id', '==', 'EVNQ01lswdeXch30vmaBJjLoTn83').stream())[0].reference.collection('students').get()[0]
+# print(students)
+# students = list(course.reference.collection('students').get())
+# students = [student.to_dict() for student in students]
+# print(students)

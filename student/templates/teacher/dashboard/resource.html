@@ -22,6 +22,7 @@ function resource()
             content.innerHTML = ''
             for (i = 0; i <res.length  ; i++) 
             {
+              console.log(i)
               try 
               {
                 img = res[i].pagemap.cse_image[0].src
@@ -30,8 +31,7 @@ function resource()
               {
                 img = 'https://www.gstatic.com/mobilesdk/160503_mobilesdk/logo/2x/firebase_28dp.png';
               }
-              console.log(i);
-              content.innerHTML += '<a target="_blank" href="'+res[i].link +'" class="m-2 bg-black p-2 rounded-md text-white w-2/5 md:w-2/5 lg:w-2/5 w-11/12"><div class="flex flex wrap"><div class="p-1.5"><img src="'+img+'" class="p-0.5 object-contain h-32 rounded-md bg-white" alt=""></div><div class="p-2"><h1 class="text-xl font-bold">'+res[i].title +'</h1><h3 class="text-xs">'+res[i].snippet+'</h3></div></div></a>'
+              content.innerHTML += '<a href="'+res[i].link +'" target="_blank" class="w-full resources-responsive m-2 bg-gray-900 p-2 rounded-md transition-linear duration-300"><h1 class="text-2xl text-white font-bold mx-1">'+res[i].title +'</h1><hr class="text-white bg-white my-1 mb-2"><img src="'+img+'" class="object-contain h-52 rounded-md bg-white w-full" alt=""><h3 class="text-white text-base mt-2 m-1">'+res[i].snippet+'</h3><h3 class="text-white text-sm bg-gray-500 m-1 p-1">'+res[i].displayLink+'</h3></a>'
             }
           });
     }
@@ -67,3 +67,26 @@ Smart Resources
 
 
 <!--               document.getElementById("content").innerHTML += res[i].title + "<br>" + '<div class="m-2 bg-black p-2 rounded-md text-white w-2/5 md:w-2/5 lg:w-2/5 w-11/12"><div class="flex flex wrap"><div class="p-1.5"><img src="'+img+'" class="p-0.5 object-contain h-36 rounded-md bg-white" alt=""></div><div class="p-2"><h1 class="text-xl font-bold">'+res[i].title +'</h1><h3 class="text-base">Course description</h3></div></div></div>' -->
+
+
+
+<!-- <a target="_blank" href="'+res[i].link +'" class="m-2 bg-black p-2 rounded-md text-white w-2/5 md:w-2/5 lg:w-2/5 w-11/12"><div class="flex flex wrap"><div class="p-1.5"><img src="'+img+'" class="p-0.5 object-contain h-32 rounded-md bg-white" alt=""></div><div class="p-2"><h1 class="text-xl font-bold">'+res[i].title +'</h1><h3 class="text-xs">'+res[i].snippet+'</h3></div></div></a> -->
+
+<!-- fetch('https://www.googleapis.com/customsearch/v1?key=AIzaSyCG3GCdUeHoEobqLSQM2UxXe0hYnzSPtXI&cx=570b87cf1909441f9&q='+search+'&start=10')
+          .then(response => response.json())
+          .then(data => {
+            const res = data.items
+            for (i = 0; i <res.length  ; i++) 
+            {
+              console.log(i)
+              try 
+              {
+                img = res[i].pagemap.cse_image[0].src
+              }
+              catch(err) 
+              {
+                img = 'https://www.gstatic.com/mobilesdk/160503_mobilesdk/logo/2x/firebase_28dp.png';
+              }
+              content.innerHTML += '<a href="'+res[i].link +'" target="_blank" class="w-full card-responsive m-2 bg-gray-900 p-2 rounded-md transition-linear duration-300"><h1 class="text-2xl text-white font-bold mx-1">'+res[i].title +'</h1><hr class="text-white bg-white my-1 mb-2"><img src="'+img+'" class="object-contain h-52 p-1 rounded-md bg-white w-full" alt=""><h3 class="text-white text-base mt-2 m-1">'+res[i].snippet+'</h3><h3 class="text-white text-sm bg-gray-500 m-1 p-1">'+res[i].displayLink+'</h3></a>'
+            }
+          }); -->

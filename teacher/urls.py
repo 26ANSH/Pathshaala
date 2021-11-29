@@ -8,8 +8,10 @@ urlpatterns = [
     path('auth/signup/', views.signin, name='signup'),
     path('auth/verify/', views.verifyemail, name='verify'),
     path('dashboard/', views.dashboard, name="dashboard"),
-    path('dashboard/students/', views.students, name="students"),
+    path('dashboard/courses/<slug:course_id>/students/', views.students, name="students"),
     path('dashboard/courses/', views.courses, name="courses"),
     path('dashboard/resources/', views.sr, name="smart resources"),
+    path('dashboard/videos/', views.sv, name="smart videos"),
     path('dashboard/courses/create/', views.new_course, name="new_course"),
+    path('dashboard/courses/<slug:course_id>', views.course, name="course"),
 ]

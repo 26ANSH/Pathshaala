@@ -1,4 +1,5 @@
 import pyrebase
+import json
 
 CONFIG = {
   'apiKey': "AIzaSyCG3GCdUeHoEobqLSQM2UxXe0hYnzSPtXI",
@@ -19,10 +20,10 @@ def create_user(email, password):
     user = auth.create_user_with_email_and_password(email, password)
     return user['localId']
   except Exception as e:
-      print(e.response.errors)
+      msg = json.loads(e.args[1])['error']['message']
       return 400
 
-def teacher_login(email, password):
+def student_login(email, password):
   try:
     user = auth.sign_in_with_email_and_password(email, password)
     return user['localId']

@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .firebase import create_user, teacher_login, uploadimage
-from .models import _new_user, get_token, _new_course, get_courses, add_student, get_student_details
+from .models import _new_course, _new_user, get_token, get_courses, get_meta, add_student, get_student_details, get_course
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -148,12 +148,12 @@ def verifyemail(request):
 
 def dashboard(request):
     if teacher_auth(request):
-        return render(request, 'teacher/dashboard/main.html', {'userName':request.user.first_name})
+        return render(request, 'teacher/dashboard/main.html', {'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}, 'data':get_meta(request.user.username.split('_')[1]) })
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
 
 @csrf_exempt
-def students(request):
+def students(request, course_id):
     if teacher_auth(request):
         if request.method == 'POST':
             received_json_data = json.loads(request.body)
@@ -164,28 +164,28 @@ def students(request):
                 name = response['name']
                 return JsonResponse({'email':received_json_data['mail'], 'code':'✅','name':name })
             else:
-                # msg = render_to_string('mail.html', {'header':'Welcome to Pathshaala👨‍💻', 'name': '','link':'https://pathshaala.azurewebsites.net', 'email':received_json_data['mail']})
-                # email = EmailMessage(
-                #     f'Invite from {request.user.first_name}', 
-                #     msg,
-                #     settings.EMAIL_HOST_USER,
-                #     received_json_data['mail']
-                # )
-                # email.content_subtype = 'html'
-                # email.fail_silently = False
-                # mail = sync_to_async(email.send)
-                # asyncio.create_task(mail()) 
+                msg = render_to_string('mail.html', {'header':'Welcome to Pathshaala 👨‍💻', 'name': '','link':'https://pathshaala.azurewebsites.net','t_name':request.user.first_name, 'email':received_json_data['mail']})
+                email = EmailMessage(
+                    f'Invite from {request.user.first_name}', 
+                    msg,
+                    settings.EMAIL_HOST_USER,
+                    [received_json_data['mail']]
+                )
+                email.content_subtype = 'html'
+                email.fail_silently = False
+                email.send()
                 return JsonResponse({'email':received_json_data['mail'], 'code':'⛔️','name':'Invite Sent' })
         else:
-            students_data = get_student_details(request.user.username.split('_')[1])
-            return render(request, 'teacher/dashboard/users.html', {'userName':request.user.first_name, 'students':students_data})
+            students_data = get_student_details(course_id, request.user.username.split('_')[1])
+            # return HttpResponse(students_data)
+            return render(request, 'teacher/dashboard/users.html', {'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}, 'students':students_data})
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
 
 def courses(request):
     if teacher_auth(request):
         courses = get_courses(request.user.username.split('_')[1])
-        return render(request, 'teacher/dashboard/course.html',{'courses': courses, 'count':len(courses), 'userName':request.user.first_name})
+        return render(request, 'teacher/dashboard/course.html',{'courses': courses, 'count':len(courses), 'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}})
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
 
@@ -199,11 +199,11 @@ async def new_course(request):
             name = form['course-name']
             url = await sync_to_async(uploadimage)(file, "display_images/courses/"+file.name)
             # asyncio.create_task(sync_to_async(_new_course)(name, request.user.username.split('_')[1],form['course-description'], form['course-tags'], url))
-            await sync_to_async(_new_course)(name, request.user.username.split('_')[1],form['course-description'], form['course-tags'], url)
+            await sync_to_async(_new_course)(name, request.user.username.split('_')[1],form['course-description'].capitalize(), form['course-tags'], url)
 
-            return render(request,'teacher/dashboard/add_course.html', {'alert':f'Course "{name}" Has been Created', 'userName':request.user.first_name})
+            return render(request,'teacher/dashboard/add_course.html', {'alert':f'Course "{name.title()}" Has been Created', 'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}})
         else:
-            return render(request, 'teacher/dashboard/add_course.html', {'userName':request.user.first_name})
+            return render(request, 'teacher/dashboard/add_course.html', {'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}})
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
 
@@ -212,6 +212,19 @@ async def new_course(request):
         # https://firebasestorage.googleapis.com/v0/b/pathshaala-e8244.appspot.com/o/display_images%2Fcourses%2FCheers!.png?alt=media&token=ba8852c3-ef5c-4135-98bc-743a8714ce79
 def sr(request):
     if teacher_auth(request):
-        return render(request, 'teacher/dashboard/resource.html', {'userName':request.user.first_name})
+        return render(request, 'teacher/dashboard/resource.html', {'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}})
+    else:
+        return redirect('/teacher/auth/login/?error=Login to Access !!!')
+        
+def sv(request):
+    if teacher_auth(request):
+        return render(request, 'teacher/dashboard/yt.html', {'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}})
+    else:
+        return redirect('/teacher/auth/login/?error=Login to Access !!!')
+    
+def course(request, course_id):
+    if teacher_auth(request):
+        course_info = get_course(course_id, request.user.username.split('_')[1])
+        return render(request, 'teacher/dashboard/courses/main.html', {'course':course_info, 'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}})
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
