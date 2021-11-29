@@ -157,7 +157,8 @@ def students(request, course_id):
     if teacher_auth(request):
         if request.method == 'POST':
             received_json_data = json.loads(request.body)
-            code, response = add_student(received_json_data['mail'], request.user.username.split('_')[1])
+            print(course_id, received_json_data)
+            code, response = add_student(received_json_data['mail'], request.session['current_course'])
             if code == 400:
                 return JsonResponse({'code':'exist'})
             elif code == 200:
@@ -177,8 +178,8 @@ def students(request, course_id):
                 return JsonResponse({'email':received_json_data['mail'], 'code':'⛔️','name':'Invite Sent' })
         else:
             students_data = get_student_details(course_id, request.user.username.split('_')[1])
-            # return HttpResponse(students_data)
-            return render(request, 'teacher/dashboard/users.html', {'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}, 'students':students_data})
+            course_info = get_course(course_id, request.user.username.split('_')[1])
+            return render(request, 'teacher/dashboard/courses/users.html', {'course':course_info ,'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}, 'students':students_data})
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
 
@@ -225,6 +226,7 @@ def sv(request):
 def course(request, course_id):
     if teacher_auth(request):
         course_info = get_course(course_id, request.user.username.split('_')[1])
+        request.session['current_course'] = course_info['id']
         return render(request, 'teacher/dashboard/courses/main.html', {'course':course_info, 'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}})
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')

@@ -62,22 +62,24 @@ def get_courses(teacher_id):
   courses = [i.to_dict() for i in courses]
   return courses
 
-def add_student(email, t_id, c_id):
+def add_student(email, c_id):
   time = datetime.datetime.now()
   checking = db.collection('students').where('email', '==', email).stream()
 
   for check in checking:
     id = check.id
-    students = db.collection('teachers').document(t_id).collection('students').where('id', '==' , id).stream()
+    students = db.collection('courses').document(c_id).collection('students').where('id', '==' , id).stream()
     for student in students:
       return 400, student.to_dict()
-    db.collection('teachers').document(t_id).collection('students').document(id).set({'id':id, 'email':email, 'added':time, 'verified':True})
-    return 200, check.to_dict()
+    data = check.to_dict()
+    data = {'id':id, 'email':email, 'added':time, 'verified':data['verified'], 'name':data['name']}
+    db.collection('courses').document(c_id).collection('students').document(id).set(data)
+    return 200, data
 
   new = db.collection('students').document()
   id = new.id
-  new.set({'email':email, 'id':id, 'verified':False, 'created':time, 'courses':[]})
-  db.collection('teachers').document(t_id).collection('students').document(id).set({'id':id, 'email':email, 'added':time, 'verified':False, 'name':'Invite Sent'})
+  new.set({'email':email, 'id':id, 'verified':False, 'created':time})
+  db.collection('courses').document(c_id).collection('students').document(id).set({'id':id, 'email':email, 'added':time, 'verified':False, 'name':'Invite Sent'})
   return 100, id
 
 def get_student_details(code, t_id):
