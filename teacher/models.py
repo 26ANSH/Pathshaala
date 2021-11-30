@@ -74,10 +74,12 @@ def add_student(email, c_id):
     data = check.to_dict()
     data = {'id':id, 'email':email, 'added':time, 'verified':data['verified'], 'name':data['name']}
     db.collection('courses').document(c_id).collection('students').document(id).set(data)
+    db.collection('courses').document(c_id).update({'students': Increment(1)})
     return 200, data
 
   new = db.collection('students').document()
   id = new.id
+  db.collection('courses').document(c_id).update({'students': Increment(1)})
   new.set({'email':email, 'id':id, 'verified':False, 'created':time})
   db.collection('courses').document(c_id).collection('students').document(id).set({'id':id, 'email':email, 'added':time, 'verified':False, 'name':'Invite Sent'})
   return 100, id
