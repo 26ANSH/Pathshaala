@@ -112,17 +112,6 @@ def my_logout(request):
 
     return redirect('indextt')
 
-# def add_student(request)
-
-# def verifyemail(request):
-#     if request.method == 'POST':
-#         return HttpResponse('Post Method')
-#     else:
-#         if request.GET.get('code') and request.GET.get('email'):
-#             return HttpResponse('Code {} Email {}'.format(request.GET.get('code'), request.GET.get('email')))
-#         else:
-#             return HttpResponse('Get Method')
-
 def verifyemail(request):
     if request.GET.get('code') and request.GET.get('user'):
         try:
@@ -241,10 +230,3 @@ def docs(request, course_id):
         return render(request, 'teacher/dashboard/courses/pages.html', {'course':course_info, 'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}})
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
-
-# def get_course_details_for_students(request):
-#     if request.method == 'POST':
-#         email = json.loads(request.body)['email']
-#         details = get_courses_for_students(email)
-#         print(details)
-#         return JsonResponse(details)

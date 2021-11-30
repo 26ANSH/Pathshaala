@@ -1,14 +1,15 @@
 import pyrebase
 import json
 
+# Fill your Firebase Details here - 
 CONFIG = {
-  'apiKey': "AIzaSyCG3GCdUeHoEobqLSQM2UxXe0hYnzSPtXI",
-  'authDomain': "pathshaala-e8244.firebaseapp.com",
-  'databaseURL': "https://pathshaala-e8244-default-rtdb.asia-southeast1.firebasedatabase.app",
-  'projectId': "pathshaala-e8244",
-  'storageBucket': "pathshaala-e8244.appspot.com",
-  'messagingSenderId': "6017147021",
-  'appId': "1:6017147021:web:b3d814a7f6b00b205782c4"
+  'apiKey': "",
+  'authDomain': "",
+  'databaseURL': "",
+  'projectId': "",
+  'storageBucket': "",
+  'messagingSenderId': "",
+  'appId': ""
 };
 
 # start firebase authentication

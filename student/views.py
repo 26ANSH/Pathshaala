@@ -74,9 +74,6 @@ def student(request):
         # decode.sign(user)
         return HttpResponse('Wrong Link')
 
-
-        # decode.sign(user)
-
 def logout_student(request):
     logout(request)
     return redirect('/student/auth/login/?alert=Logged Out Sucessfully !!!')
