@@ -225,7 +225,10 @@ def sv(request):
     
 def course(request, course_id):
     if teacher_auth(request):
-        course_info = get_course(course_id, request.user.username.split('_')[1])
+        try:
+            course_info = get_course(course_id, request.user.username.split('_')[1])
+        except:
+            return HttpResponse('No such course')
         request.session['current_course'] = course_info['id']
         return render(request, 'teacher/dashboard/courses/main.html', {'course':course_info, 'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}})
     else:
