@@ -167,3 +167,14 @@ def get_course(code, t_id):
 # students = list(course.reference.collection('students').get())
 # students = [student.to_dict() for student in students]
 # print(students)
+
+
+# def get_courses_for_students(email):
+#     data = list()
+#     courses = db.collection('courses').stream()
+#     for course in courses:
+#         course = course.reference
+#         student = course.collection('students').where('email', '==', email).stream()
+#         for i in student:
+#             data.append(course.get().to_dict())
+#     return data

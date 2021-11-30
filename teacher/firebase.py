@@ -38,6 +38,12 @@ def uploadimage(fr, to):
   location.put(fr)
   return storage.child(to).get_url()
 
+# def doc(c_id, file):
+#   to = 'courses/'+c_id
+#   location = storage.child(to)
+#   location.put(file)
+#   return storage.child(to).get_url()
+
 
 # user = auth.sign_in_with_email_and_password('anshvidyabhanu8@gmail.com', 'password1234@')
 # print(user['localId'])
@@ -45,6 +51,4 @@ def uploadimage(fr, to):
 # print(ok)
 
 
-# print(uploadimage("media/Orange Yellow Black Illustrated Silhouette Dussehra Instagram Post.png", "display_images/courses/Orange Yellow Black Illustrated Silhouette Dussehra Instagram Post.png"))
-
-
+# print(uploadimage("media/Orange Yellow Black Illustrated Silhouette Dussehra Instagram Post.png", "display_images/courses/Orange Yellow Black Illustrated Silhouette Dussehra Instagram Post.png")

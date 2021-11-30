@@ -14,4 +14,5 @@ urlpatterns = [
     path('dashboard/videos/', views.sv, name="smart videos"),
     path('dashboard/courses/create/', views.new_course, name="new_course"),
     path('dashboard/courses/<slug:course_id>', views.course, name="course"),
+    path('dashboard/courses/<slug:course_id>/docs', views.docs, name="docs"),
 ]

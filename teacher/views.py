@@ -230,3 +230,18 @@ def course(request, course_id):
         return render(request, 'teacher/dashboard/courses/main.html', {'course':course_info, 'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}})
     else:
         return redirect('/teacher/auth/login/?error=Login to Access !!!')
+
+def docs(request, course_id):
+    if teacher_auth(request):
+        course_info = get_course(course_id, request.user.username.split('_')[1])
+        print(request.session['current_course'])
+        return render(request, 'teacher/dashboard/courses/pages.html', {'course':course_info, 'userName':{'fname':request.user.first_name, 'lname':request.user.last_name}})
+    else:
+        return redirect('/teacher/auth/login/?error=Login to Access !!!')
+
+# def get_course_details_for_students(request):
+#     if request.method == 'POST':
+#         email = json.loads(request.body)['email']
+#         details = get_courses_for_students(email)
+#         print(details)
+#         return JsonResponse(details)
